@@ -1,5 +1,6 @@
 ﻿using Market.Domain.Entities;
 using Market.Domain.Entities.Cross;
+using Market.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.Domain
@@ -23,9 +24,9 @@ namespace Market.Domain
         public DbSet<Check> Checks { get; set; }
         public DbSet<Sale> Sales { get; set; }
 
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        public MarketDbContext(DbContextOptions<MarketDbContext> options) :base(options)
         {
-            optionsBuilder.UseSqlServer("Server=WIN-PFGV5N8DK24;Database=Market;Trusted_Connection=True;");
+
         }
 
 

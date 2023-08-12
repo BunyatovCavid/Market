@@ -12,7 +12,9 @@ namespace Market
             CreateMap<LoginDto, Account>();  
             CreateMap<LoginDto, RegisterDto>();  
             CreateMap<Account?, Account>();
+            CreateMap<Item, ItemGetDto>();
             CreateMap<AccountPutDto, Account>(); 
+            CreateMap<ItemGetDto, Item>(); 
         }
     }
 }

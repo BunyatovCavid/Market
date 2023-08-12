@@ -34,6 +34,7 @@ builder.Services.AddAutoMapper(typeof(Mapping));
 
 builder.Services.AddScoped<IAccount,AccountService>();
 builder.Services.AddScoped<ICrossAccountRole,CrossAccountRoleService>();
+builder.Services.AddScoped<IItem,ItemService>();
 builder.Services.AddScoped<JWTTokenService>();
 
 
