@@ -15,8 +15,9 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Password = table.Column<int>(type: "int", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Password = table.Column<int>(type: "int", maxLength: 15, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -29,8 +30,8 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Number = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Number = table.Column<int>(type: "int", maxLength: 2, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -44,7 +45,7 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -57,11 +58,11 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Barkod = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Barkod = table.Column<int>(type: "int", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Bonus = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -82,8 +83,8 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -104,8 +105,8 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -126,11 +127,11 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Barkod = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Fin = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Phone = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Barkod = table.Column<int>(type: "int", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
+                    Fin = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -155,9 +156,9 @@ namespace Market.Migrations
                     Paper_Number = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Concession = table.Column<float>(type: "real", nullable: false),
-                    Discount = table.Column<float>(type: "real", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
+                    Concession = table.Column<float>(type: "real", nullable: true),
+                    Discount = table.Column<float>(type: "real", nullable: true),
                     Amount = table.Column<float>(type: "real", nullable: false),
                     Final_Amount = table.Column<float>(type: "real", nullable: false),
                     Inclusive = table.Column<int>(type: "int", nullable: false),
@@ -233,11 +234,11 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Discount_Check = table.Column<bool>(type: "bit", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -267,7 +268,7 @@ namespace Market.Migrations
                     Our_Debt = table.Column<float>(type: "real", nullable: false),
                     Us_Debt = table.Column<float>(type: "real", nullable: false),
                     Final_Debt = table.Column<float>(type: "real", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -301,7 +302,7 @@ namespace Market.Migrations
                     Bonus_Amount = table.Column<int>(type: "int", nullable: false),
                     Final_Amount = table.Column<float>(type: "real", nullable: false),
                     CashId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -337,13 +338,13 @@ namespace Market.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Barkod = table.Column<int>(type: "int", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Barkod = table.Column<int>(type: "int", maxLength: 15, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Sub_CategoryId = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -383,7 +384,7 @@ namespace Market.Migrations
                     Discount_CardId = table.Column<int>(type: "int", nullable: false),
                     ItemId = table.Column<int>(type: "int", nullable: false),
                     Report = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -415,19 +416,19 @@ namespace Market.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     Buy_Price = table.Column<float>(type: "real", nullable: false),
                     Sale_Percentage = table.Column<float>(type: "real", nullable: false),
                     Sale_Price = table.Column<float>(type: "real", nullable: false),
-                    Concession = table.Column<float>(type: "real", nullable: false),
-                    Discount = table.Column<float>(type: "real", nullable: false),
-                    Discount_Percentage = table.Column<float>(type: "real", nullable: false),
+                    Concession = table.Column<float>(type: "real", nullable: true),
+                    Discount = table.Column<float>(type: "real", nullable: true),
+                    Discount_Percentage = table.Column<float>(type: "real", nullable: true),
                     Buy_Amount = table.Column<float>(type: "real", nullable: false),
                     Sale_Amount = table.Column<float>(type: "real", nullable: false),
                     Final = table.Column<float>(type: "real", nullable: false),
                     Print_Number = table.Column<int>(type: "int", nullable: false),
                     PaperId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -451,10 +452,10 @@ namespace Market.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ItemId = table.Column<int>(type: "int", nullable: false),
-                    Number = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", maxLength: 5, nullable: false),
                     Amount = table.Column<float>(type: "real", nullable: false),
                     CheckId = table.Column<int>(type: "int", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
                 },
                 constraints: table =>
                 {

@@ -30,11 +30,17 @@ namespace Market.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
+
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<int>("Password")
+                        .HasMaxLength(15)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -54,6 +60,7 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Barkod")
+                        .HasMaxLength(15)
                         .HasColumnType("int");
 
                     b.Property<int>("Bonus")
@@ -63,16 +70,18 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -122,10 +131,11 @@ namespace Market.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("Number")
+                        .HasMaxLength(2)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -150,12 +160,13 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -194,8 +205,8 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("Discount_CardId")
                         .HasColumnType("int");
@@ -236,12 +247,13 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 
@@ -268,8 +280,8 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<float>("Final_Debt")
                         .HasColumnType("real");
@@ -319,26 +331,30 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Barkod")
+                        .HasMaxLength(15)
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Fin")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("Id");
 
@@ -367,8 +383,8 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("Discount_CardId")
                         .HasColumnType("int");
@@ -405,17 +421,17 @@ namespace Market.Migrations
                     b.Property<float>("Buy_Price")
                         .HasColumnType("real");
 
-                    b.Property<float>("Concession")
+                    b.Property<float?>("Concession")
                         .HasColumnType("real");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
-                    b.Property<float>("Discount")
+                    b.Property<float?>("Discount")
                         .HasColumnType("real");
 
-                    b.Property<float>("Discount_Percentage")
+                    b.Property<float?>("Discount_Percentage")
                         .HasColumnType("real");
 
                     b.Property<float>("Final")
@@ -425,6 +441,7 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Number")
+                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.Property<int>("PaperId")
@@ -464,6 +481,7 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Barkod")
+                        .HasMaxLength(15)
                         .HasColumnType("int");
 
                     b.Property<int>("CategoryId")
@@ -476,14 +494,16 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.Property<int>("Number")
+                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.Property<int>("Sub_CategoryId")
@@ -524,7 +544,7 @@ namespace Market.Migrations
                     b.Property<int>("CompanyId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Concession")
+                    b.Property<float?>("Concession")
                         .HasColumnType("real");
 
                     b.Property<int>("Correction")
@@ -534,10 +554,10 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
-                    b.Property<float>("Discount")
+                    b.Property<float?>("Discount")
                         .HasColumnType("real");
 
                     b.Property<float>("Final_Amount")
@@ -568,7 +588,8 @@ namespace Market.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -590,13 +611,14 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
 
                     b.Property<int>("Number")
+                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -627,15 +649,16 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(12)
+                        .HasColumnType("nvarchar(12)");
 
                     b.Property<bool>("Discount_Check")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("Id");
 

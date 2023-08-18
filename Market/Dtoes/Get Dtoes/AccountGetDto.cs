@@ -1,17 +1,18 @@
 ﻿using Market.Domain.Entities.Cross;
-using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc;
 
-namespace Market.Domain.Entities
+namespace Market.Dtoes.Get_Dtoes
 {
-    public class Role
+    public class AccountGetDto
     {
-        public Role()
+        public AccountGetDto()
         {
             Cross_Account_Role = new HashSet<Cross_Account_Role>();
         }
         public int Id { get; set; }
-        [MaxLength(10)]
         public string Name { get; set; }
+        public int Password { get; set; }
+        public string Description { get; set; }
         public ICollection<Cross_Account_Role> Cross_Account_Role { get; set; }
     }
 }

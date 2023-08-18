@@ -1,4 +1,6 @@
-﻿namespace Market.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Market.Domain.Entities
 {
     public class Cash
     {
@@ -7,8 +9,10 @@
             Checks = new HashSet<Check>();
         }
         public int Id { get; set; }
+        [MaxLength(2)]
         public int Number { get; set; }
-        public string Description { get; set; }
+        [MaxLength(12)]
+        public string? Description { get; set; }
         public ICollection<Check>  Checks{ get; set; }
     }
 }

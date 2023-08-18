@@ -1,5 +1,7 @@
-﻿using Market.Domain.Entities.Cross;
+﻿using AutoMapper.Configuration.Annotations;
+using Market.Domain.Entities.Cross;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Reflection.Metadata.Ecma335;
 
 namespace Market.Domain.Entities
@@ -22,9 +24,13 @@ namespace Market.Domain.Entities
             Items = new HashSet<Item>();
         }
         public int Id { get; set; }
+        [MaxLength(25)]
         public string Name { get; set; }
+        [MaxLength(15)]
         public int Password { get; set; }
-        public string Description { get; set; }
+        [MaxLength(12)]
+        public string? Description { get; set; }
+
         public ICollection<Cross_Account_Role> Cross_Account_Role { get; set; }
         public ICollection<Bonus_Card> Bonus_Cards { get; set; }
         public ICollection<Bonus_Card_Report> Bonus_Card_Reports { get; set; }

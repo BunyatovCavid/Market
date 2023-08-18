@@ -3,6 +3,7 @@ using Market.Domain;
 using Market.Domain.Entities;
 using Market.Domain.Entities.Cross;
 using Market.Dtoes;
+using Market.Dtoes.Get_Dtoes;
 using Market.Interfaces;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,34 +19,40 @@ namespace Market.Services
             _db = db;
             _mapper = mapper;
         }
-        public async Task<ICollection<Account>> GetAccountsAsync()
+        public async Task<ICollection<AccountGetDto>> GetAccountsAsync()
         {
-            var data = await _db.Accounts.Include(a=>a.Cross_Account_Role).FirstOrDefaultAsync();
-            return (ICollection<Account>)data;
+            var data = await _db.Accounts.Include(a=>a.Cross_Account_Role).ToListAsync();
+            ICollection<AccountGetDto> response = _mapper.Map<ICollection<AccountGetDto>>(data);
+            return response;
         }
-        public async Task<ICollection<Account>> PostAccountRoleAsync(Cross_Account_RoleDto dto)
+        public async Task<ICollection<AccountGetDto>> PostAccountRoleAsync(Cross_Account_RoleDto dto)
         {
-            var data = new Account()
+            var check = await GetAccountByIdAsync(dto.AccountId);
+            ICollection<AccountGetDto> response = null;
+            if (check != null)
             {
-                Id = dto.AccountId,
-                Cross_Account_Role = new HashSet<Cross_Account_Role>() {
+                var data = new Account()
+                {
+                     Description = "IsCreate",
+                    Cross_Account_Role = new HashSet<Cross_Account_Role>() {
                     new() { RoleId = dto.RoleId }
                }
-            };
-            await _db.AddAsync(data);
+                };
+                await _db.AddAsync(data);
 
- 
+                await _db.SaveChangesAsync();
 
-            var response = GetAccountsAsync();
-            await _db.SaveChangesAsync();
-            return (ICollection<Account>)response;
+                 response = await GetAccountsAsync();
+            }
+            return response;
 
         }
-        public async Task<Account> DeleteAccountRoleAsync(Cross_Account_RoleDto dto) {
+        public async Task<AccountGetDto> DeleteAccountRoleAsync(Cross_Account_RoleDto dto) {
             var data = await _db.Accounts.Include(c => c.Cross_Account_Role).FirstOrDefaultAsync(a => a.Id == dto.AccountId);
-            Role data2 = new();
+            AccountGetDto response = null;
             if (data != null)
             {
+                Role data2 = new();
                 foreach (var item in data.Cross_Account_Role)
                 {
                     if (item.RoleId == dto.RoleId)
@@ -62,18 +69,17 @@ namespace Market.Services
                         RoleId = dto.RoleId
                     });
                     await _db.SaveChangesAsync();
-                    var response = await _db.Accounts.Include(a => a.Cross_Account_Role).FirstOrDefaultAsync(a => a.Id == dto.AccountId);
-                    return response;
+                    var data_final = await _db.Accounts.Include(a => a.Cross_Account_Role).FirstOrDefaultAsync(a => a.Id == dto.AccountId);
+                     response = _mapper.Map<AccountGetDto>(data_final);
                 }
-
             }
-            return null;
+            return response;
         }
-
-        public async Task<Account> GetAccountByIdAsync(int id)
+        public async Task<AccountGetDto> GetAccountByIdAsync(int id)
         {
             var data = await _db.Accounts.Include(a => a.Cross_Account_Role).FirstOrDefaultAsync(a=>a.Id ==id);
-            return data;
+            AccountGetDto response = _mapper.Map<AccountGetDto>(data);
+            return response;
         }
     }
 }

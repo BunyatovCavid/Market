@@ -1,4 +1,5 @@
 using Market.Domain.Entities;
+using Market.Dtoes;
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.PutDto;
 using Market.Interfaces;
@@ -11,24 +12,24 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    [Authorize("Boss")]
     public class AccountController : ControllerBase
     {
         private readonly IAccount _account;
         private readonly JWTTokenService _token;
-        public AccountController(IAccount account, JWTTokenService token)
+        private readonly ICrossAccountRole _cross;
+        public AccountController(IAccount account, JWTTokenService token, ICrossAccountRole cross)
         {
             _token = token;
             _account = account;
+            _cross = cross;
         }
 
-        [HttpGet("{Login}")]
-        [AllowAnonymous]
-        public async Task<string> Login([FromQuery]LoginDto dto)
+        [HttpGet("Login")]
+        public async Task<IActionResult> Login([FromQuery]LoginDto dto)
         {
             var data = await _token.LogIn(dto);
             var response = JsonSerializer.Serialize(data);
-            return response;
+            return Ok(response);
         }
 
 
@@ -66,7 +67,38 @@ namespace Market.Controllers
         }
 
 
-        
+
+
+
+
+        [HttpGet("GetAccountByRole")]
+        public async Task<IActionResult> GetAccountByRole()
+        {
+            var data = await _cross.GetAccountsAsync();
+            return Ok(data);
+        }
+
+        [HttpGet("GetAccountRoleById")]
+        public async Task<IActionResult> GetAccountRoleById(int id)
+        {
+            var data = await _cross.GetAccountByIdAsync(id);
+            return Ok(data);
+        }
+
+        [HttpPost("CreateAccountRole")]
+        public async Task<IActionResult> CreateAccountRole([FromQuery] Cross_Account_RoleDto dto)
+        {
+            var data = await _cross.PostAccountRoleAsync(dto);
+            return Ok(data);
+        }
+        [HttpDelete("DeleteAccountRole")]
+        public async Task<IActionResult> DeleteAccountRole([FromQuery] Cross_Account_RoleDto dto)
+        {
+            var data = await _cross.DeleteAccountRoleAsync(dto);
+            return Ok(data);
+        }
+
+
 
 
 

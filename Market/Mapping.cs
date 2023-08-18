@@ -11,7 +11,8 @@ namespace Market
         {
             CreateMap<LoginDto, Account>();  
             CreateMap<LoginDto, RegisterDto>();  
-            CreateMap<Account?, Account>();
+            CreateMap<Account, AccountGetDto>();
+            CreateMap<ICollection<Account>, ICollection<AccountGetDto>>();
             CreateMap<Item, ItemGetDto>();
             CreateMap<AccountPutDto, Account>(); 
             CreateMap<ItemGetDto, Item>(); 

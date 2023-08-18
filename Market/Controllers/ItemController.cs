@@ -18,21 +18,21 @@ namespace Market.Controllers
         }
 
         [HttpGet("Item")]
-        public async Task<ICollection<Item>> GetItems(ItemFilterDto dto)
+        public async Task<ICollection<Item>> GetItems([FromQuery]ItemFilterDto dto)
         {
             var data = await _item.GetAllMal(dto);
             return data;
         }
 
         [HttpPost("CrateItem")]
-        public async Task<ICollection<Item>> CreateItem(ItemGetDto dto)
+        public async Task<ICollection<Item>> CreateItem([FromQuery] ItemGetDto dto)
         {
             var data = await _item.Post(dto);
             return data;
         }
 
         [HttpPut("EditItem")]
-        public async Task<Item> EditItem(ItemPutDto dto, ItemGetDto putdto)
+        public async Task<Item> EditItem([FromQuery] ItemPutDto dto, [FromQuery] ItemGetDto putdto)
         {
             var data = await _item.Put(dto,putdto);
             return data;
@@ -40,7 +40,7 @@ namespace Market.Controllers
 
 
         [HttpPut("DeleteItem")]
-        public async Task<ICollection<Item>> DeleteItem(ItemPutDto dto)
+        public async Task<ICollection<Item>> DeleteItem([FromQuery] ItemPutDto dto)
         {
             var data = await _item.Delete(dto);
             return data;

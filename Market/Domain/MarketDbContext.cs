@@ -1,6 +1,5 @@
 ﻿using Market.Domain.Entities;
 using Market.Domain.Entities.Cross;
-using Market.Migrations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.Domain

@@ -1,4 +1,6 @@
-﻿namespace Market.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Market.Domain.Entities
 {
     public class Discount_Card_Report
     {
@@ -6,7 +8,8 @@
         public int Discount_CardId { get; set; }
         public int ItemId { get; set; }
         public int Report { get; set; }
-        public string Description { get; set; }
+        [MaxLength(12)]
+        public string? Description { get; set; }
         public DateTime Date { get; set; }
         public int AccountId { get; set; }
 

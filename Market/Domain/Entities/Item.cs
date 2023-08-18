@@ -1,17 +1,22 @@
-﻿using System.Security;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Security;
 
 namespace Market.Domain.Entities
 {
     public class Item
     {
         public int Id { get; set; }
+        [MaxLength(15)]
         public int Barkod { get; set; }
+        [MaxLength(40)]
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public int Sub_CategoryId { get; set; }
+        [MaxLength(5)]
         public int Number { get; set; }
         public int CompanyId { get; set; }
-        public string Description { get; set; }
+        [MaxLength(12)]
+        public string? Description { get; set; }
         public DateTime Date { get; set; }
         public int AccountId { get; set; }
 

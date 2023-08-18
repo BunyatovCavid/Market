@@ -1,4 +1,6 @@
-﻿namespace Market.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Market.Domain.Entities
 {
     public class Paper
     {
@@ -10,9 +12,10 @@
         public int Paper_Number { get; set; }
         public DateTime Date { get; set; }
         public int CompanyId { get; set; }
-        public string Description { get; set; }
-        public float Concession { get; set; }
-        public float Discount { get; set; }
+        [MaxLength(12)]
+        public string? Description { get; set; }
+        public float? Concession { get; set; }
+        public float? Discount { get; set; }
         public float Amount { get; set; }
         public float Final_Amount { get; set; }
         public int Inclusive { get; set; }
