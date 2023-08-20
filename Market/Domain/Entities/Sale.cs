@@ -6,11 +6,9 @@ namespace Market.Domain.Entities
     {
         public int Id { get; set; }
         public int ItemId { get; set; }
-        [MaxLength(5)]
         public int Number { get; set; }
         public float Amount { get; set; }
         public int CheckId { get; set; }
-        [MaxLength(12)]
         public string? Description { get; set; }
         public Check Check { get; set; }
         public Item Item { get; set; }

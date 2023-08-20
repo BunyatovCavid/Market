@@ -10,7 +10,6 @@ namespace Market.Domain.Entities
             Cross_Account_Role = new HashSet<Cross_Account_Role>();
         }
         public int Id { get; set; }
-        [MaxLength(10)]
         public string Name { get; set; }
         public ICollection<Cross_Account_Role> Cross_Account_Role { get; set; }
     }

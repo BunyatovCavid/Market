@@ -12,7 +12,7 @@ namespace Market.Domain.Entities
         public int Paper_Number { get; set; }
         public DateTime Date { get; set; }
         public int CompanyId { get; set; }
-        [MaxLength(12)]
+        public int Status { get; set; }
         public string? Description { get; set; }
         public float? Concession { get; set; }
         public float? Discount { get; set; }

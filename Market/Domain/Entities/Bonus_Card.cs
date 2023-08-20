@@ -9,14 +9,10 @@ namespace Market.Domain.Entities
             Bonus_Card_Report = new HashSet<Bonus_Card_Report>();
         }
         public int Id { get; set; }
-        [MaxLength(15)]
         public int Barkod { get; set; }
-        [MaxLength(25)]
         public string Name { get; set; }
-        [MaxLength(15)]
         public string Phone { get; set; }
         public int Bonus { get; set; }
-        [MaxLength(12)]
         public string? Description { get; set; }
         public DateTime Date { get; set; }
         public int AccountId { get; set; }

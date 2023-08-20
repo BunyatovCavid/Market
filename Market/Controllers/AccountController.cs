@@ -22,7 +22,9 @@ namespace Market.Controllers
             _token = token;
             _account = account;
             _cross = cross;
+
         }
+
 
         [HttpGet("Login")]
         public async Task<IActionResult> Login([FromQuery]LoginDto dto)

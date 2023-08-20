@@ -18,17 +18,13 @@ namespace Market.Domain.Entities
             Companies = new HashSet<Company>();
             Company_Reports = new HashSet<Company_Report>();
             Discount_Cards = new HashSet<Discount_Card>();
-            Discount_Card_Reports = new HashSet<Discount_Card_Report>();
             Papers = new HashSet<Paper>();
             Sub_Categories = new HashSet<Sub_Category>();
             Items = new HashSet<Item>();
         }
         public int Id { get; set; }
-        [MaxLength(25)]
         public string Name { get; set; }
-        [MaxLength(15)]
         public int Password { get; set; }
-        [MaxLength(12)]
         public string? Description { get; set; }
 
         public ICollection<Cross_Account_Role> Cross_Account_Role { get; set; }
@@ -39,7 +35,6 @@ namespace Market.Domain.Entities
         public ICollection<Company> Companies { get; set; }
         public ICollection<Company_Report> Company_Reports { get; set; }
         public ICollection<Discount_Card> Discount_Cards { get; set; }
-        public ICollection<Discount_Card_Report> Discount_Card_Reports { get; set; }
         public ICollection<Paper> Papers { get; set; }
         public ICollection<Item> Items { get; set; }
         public ICollection<Sub_Category> Sub_Categories { get; set; }

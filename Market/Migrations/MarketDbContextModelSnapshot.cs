@@ -31,8 +31,8 @@ namespace Market.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -113,6 +113,10 @@ namespace Market.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Description")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AccountId");
@@ -165,8 +169,8 @@ namespace Market.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
@@ -186,16 +190,16 @@ namespace Market.Migrations
                     b.Property<int>("AccountId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Add_Amount")
+                    b.Property<float?>("Add_Amount")
                         .HasColumnType("real");
 
                     b.Property<float>("Amount")
                         .HasColumnType("real");
 
-                    b.Property<int>("Bonus_Amount")
+                    b.Property<int?>("Bonus_Amount")
                         .HasColumnType("int");
 
-                    b.Property<int>("Bonus_CardId")
+                    b.Property<int?>("Bonus_CardId")
                         .HasColumnType("int");
 
                     b.Property<int>("CashId")
@@ -205,16 +209,15 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Discount_CardId")
+                    b.Property<int?>("Discount_CardId")
                         .HasColumnType("int");
 
-                    b.Property<float>("Final_Amount")
+                    b.Property<float?>("Final_Amount")
                         .HasColumnType("real");
 
-                    b.Property<float>("Out_Amount")
+                    b.Property<float?>("Out_Amount")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
@@ -222,12 +225,14 @@ namespace Market.Migrations
                     b.HasIndex("AccountId");
 
                     b.HasIndex("Bonus_CardId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Bonus_CardId] IS NOT NULL");
 
                     b.HasIndex("CashId");
 
                     b.HasIndex("Discount_CardId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[Discount_CardId] IS NOT NULL");
 
                     b.ToTable("Checks");
                 });
@@ -252,8 +257,8 @@ namespace Market.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasKey("Id");
 
@@ -283,16 +288,16 @@ namespace Market.Migrations
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
-                    b.Property<float>("Final_Debt")
+                    b.Property<float?>("Final_Debt")
                         .HasColumnType("real");
 
-                    b.Property<float>("First_Debt")
+                    b.Property<float?>("First_Debt")
                         .HasColumnType("real");
 
-                    b.Property<float>("Our_Debt")
+                    b.Property<float?>("Our_Debt")
                         .HasColumnType("real");
 
-                    b.Property<float>("Us_Debt")
+                    b.Property<float?>("Us_Debt")
                         .HasColumnType("real");
 
                     b.HasKey("Id");
@@ -368,45 +373,6 @@ namespace Market.Migrations
                     b.ToTable("Discount_Cards");
                 });
 
-            modelBuilder.Entity("Market.Domain.Entities.Discount_Card_Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<int>("Discount_CardId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Report")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("Discount_CardId");
-
-                    b.HasIndex("ItemId")
-                        .IsUnique();
-
-                    b.ToTable("Discount_Card_Reports");
-                });
-
             modelBuilder.Entity("Market.Domain.Entities.Included", b =>
                 {
                     b.Property<int>("Id")
@@ -424,10 +390,6 @@ namespace Market.Migrations
                     b.Property<float?>("Concession")
                         .HasColumnType("real");
 
-                    b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
                     b.Property<float?>("Discount")
                         .HasColumnType("real");
 
@@ -441,7 +403,6 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<int>("Number")
-                        .HasMaxLength(5)
                         .HasColumnType("int");
 
                     b.Property<int>("PaperId")
@@ -503,7 +464,7 @@ namespace Market.Migrations
                         .HasColumnType("nvarchar(40)");
 
                     b.Property<int>("Number")
-                        .HasMaxLength(5)
+                        .HasMaxLength(10)
                         .HasColumnType("int");
 
                     b.Property<int>("Sub_CategoryId")
@@ -569,6 +530,10 @@ namespace Market.Migrations
                     b.Property<int>("Paper_Number")
                         .HasColumnType("int");
 
+                    b.Property<int>("Status")
+                        .HasMaxLength(10)
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasAlternateKey("Paper_Number");
@@ -611,8 +576,8 @@ namespace Market.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("ItemId")
                         .HasColumnType("int");
@@ -649,8 +614,8 @@ namespace Market.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<bool>("Discount_Check")
                         .HasColumnType("bit");
@@ -720,9 +685,7 @@ namespace Market.Migrations
 
                     b.HasOne("Market.Domain.Entities.Bonus_Card", "Bonus_Card")
                         .WithOne("Check")
-                        .HasForeignKey("Market.Domain.Entities.Check", "Bonus_CardId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("Market.Domain.Entities.Check", "Bonus_CardId");
 
                     b.HasOne("Market.Domain.Entities.Cash", "Cash")
                         .WithMany("Checks")
@@ -732,9 +695,7 @@ namespace Market.Migrations
 
                     b.HasOne("Market.Domain.Entities.Discount_Card", "Discount_Card")
                         .WithOne("Check")
-                        .HasForeignKey("Market.Domain.Entities.Check", "Discount_CardId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
+                        .HasForeignKey("Market.Domain.Entities.Check", "Discount_CardId");
 
                     b.Navigation("Account");
 
@@ -803,33 +764,6 @@ namespace Market.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("Market.Domain.Entities.Discount_Card_Report", b =>
-                {
-                    b.HasOne("Market.Domain.Entities.Account", "Account")
-                        .WithMany("Discount_Card_Reports")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Market.Domain.Entities.Discount_Card", "Discount_Card")
-                        .WithMany("Discount_Card_Reports")
-                        .HasForeignKey("Discount_CardId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("Market.Domain.Entities.Item", "Item")
-                        .WithOne("Discount_Card_Report")
-                        .HasForeignKey("Market.Domain.Entities.Discount_Card_Report", "ItemId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Discount_Card");
-
-                    b.Navigation("Item");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Included", b =>
@@ -902,7 +836,7 @@ namespace Market.Migrations
                     b.HasOne("Market.Domain.Entities.Check", "Check")
                         .WithMany("Sales")
                         .HasForeignKey("CheckId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Market.Domain.Entities.Item", "Item")
@@ -951,8 +885,6 @@ namespace Market.Migrations
 
                     b.Navigation("Cross_Account_Role");
 
-                    b.Navigation("Discount_Card_Reports");
-
                     b.Navigation("Discount_Cards");
 
                     b.Navigation("Items");
@@ -998,15 +930,10 @@ namespace Market.Migrations
                 {
                     b.Navigation("Check")
                         .IsRequired();
-
-                    b.Navigation("Discount_Card_Reports");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Item", b =>
                 {
-                    b.Navigation("Discount_Card_Report")
-                        .IsRequired();
-
                     b.Navigation("Included")
                         .IsRequired();
 

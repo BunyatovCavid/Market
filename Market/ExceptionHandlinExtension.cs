@@ -19,29 +19,11 @@ namespace Market
                     if (contextFeature != null)
                     {
                         logger.LogError($"Something went wrong: {contextFeature.Error}");
-                        //switch (contextFeature.Error)
-                        //{
-                        //    case ApplicationException:
-                        //        await context.Response.WriteAsync(new ErrorDetails()
-                        //        {
-                        //            StatusCode = context.Response.StatusCode,
-                        //            Message = "Application  Error."
-                        //        }.ToString());
-                        //        break;
+                        await context.Response.WriteAsync(contextFeature.Error.Message);
+                        await context.Response.WriteAsync(@"
 
-                        //    case Exception:
-                        //        await context.Response.WriteAsync(new ErrorDetails()
-                        //        {
-                        //            StatusCode = context.Response.StatusCode,
-                        //            Message = "You Have An Error."
-                        //        }.ToString());
-                        //        break;
-
-                        //}
-                        await context.Response.WriteAsync(new ErrorDetails()
-                        {
-                            Message = contextFeature.Error.Message
-                        }.ToString());
+");
+                        await context.Response.WriteAsync(contextFeature.Error.StackTrace);
 
                     }
                 });
