@@ -1,21 +1,64 @@
 ﻿using AutoMapper;
 using Market.Domain.Entities;
+using Market.Dtoes;
 using Market.Dtoes.Get_Dtoes;
+using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
 
 namespace Market
 {
-    public class Mapping:Profile
+    public class Mapping : Profile
     {
         public Mapping()
         {
-            CreateMap<LoginDto, Account>();  
-            CreateMap<LoginDto, RegisterDto>();  
+            CreateMap<LoginDto, Account>();
+            CreateMap<LoginDto, RegisterDto>();
             CreateMap<Account, AccountGetDto>();
-            CreateMap<ICollection<Account>, ICollection<AccountGetDto>>();
+            CreateMap<AccountPutDto, AccountGetDto>();
+
+
             CreateMap<Item, ItemGetDto>();
-            CreateMap<AccountPutDto, Account>(); 
-            CreateMap<ItemGetDto, Item>(); 
+            CreateMap<ItemGetDto, Item>();
+            CreateMap<ItemPutDto, ItemGetDto>();
+
+            CreateMap<Role, RoleDto>();
+            CreateMap<RoleDto?, Role>();
+            CreateMap<RoleDto?, RoleDto>();
+            CreateMap<RolePostDto, Role>();
+            CreateMap<List<Role>?, ICollection<RoleDto>?>();
+
+
+            CreateMap<PaperPostDto,Paper>();
+            CreateMap<Paper, PaperGetDto>();
+            CreateMap<PaperPutDto, Paper>();
+
+            CreateMap<Included, IncludedGetDto>();
+            CreateMap<IncludedGetDto, Included>();
+
+            CreateMap<Cash, CashGetDto>();
+            CreateMap<CashPostDto, Cash>();
+            CreateMap<CashPutDto, Cash>();
+
+
+            CreateMap<CheckPostDto, Check>();
+            CreateMap<Check, CheckGetDto>();
+            CreateMap<CheckGetDto, Check>();
+
+
+            CreateMap<Sale, SaleGetDto>();
+            CreateMap<SaleGetDto, Sale>();
+
+            CreateMap<Discount_Card, Discount_CardGetDto>();
+            CreateMap<Discount_CardPostDto, Discount_Card>();
+            CreateMap<Discount_CardPutDto, Discount_Card>();
+
+            CreateMap<Bonus_Card, Bonus_CardGetDto>();
+            CreateMap<Bonus_CardPostDto, Bonus_Card>();
+            CreateMap<Bonus_cardPutDto, Bonus_Card>();
+
+            CreateMap<Bonus_Card_Report, Bonus_Card_ReportGetDto>();
+            CreateMap<Bonus_CardPostDto, Bonus_Card_Report>();
+
         }
     }
 }

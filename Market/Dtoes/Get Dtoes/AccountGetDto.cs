@@ -9,7 +9,6 @@ namespace Market.Dtoes.Get_Dtoes
         {
             Cross_Account_Role = new HashSet<Cross_Account_Role>();
         }
-        public int Id { get; set; }
         public string Name { get; set; }
         public int Password { get; set; }
         public string Description { get; set; }

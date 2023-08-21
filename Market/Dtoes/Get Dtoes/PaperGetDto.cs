@@ -1,14 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Market.Domain.Entities
+﻿namespace Market.Dtoes.Get_Dtoes
 {
-    public class Paper
+    public class PaperGetDto
     {
-        public Paper()
-        {
-            Includeds = new HashSet<Included>();
-        }
-        public int Id { get; set; }
         public int Paper_Number { get; set; }
         public DateTime Date { get; set; }
         public int CompanyId { get; set; }
@@ -20,9 +13,5 @@ namespace Market.Domain.Entities
         public float Final_Amount { get; set; }
 
         public int AccountId { get; set; }
-
-        public Account Account { get; set; }
-        public ICollection<Included> Includeds { get; set; }
-
     }
 }

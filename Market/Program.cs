@@ -1,6 +1,7 @@
 using FluentValidation.AspNetCore;
 using Market;
 using Market.Domain;
+using Market.Dtoes.Get_Dtoes;
 using Market.Interfaces;
 using Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -10,32 +11,44 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Text;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllers();//.AddFluentValidation(x=>x.RegisterValidatorsFromAssemblyContaining<Program>());
+builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsFromAssemblyContaining<Program>());
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy=> {
+builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy =>
+{
     policy.AllowAnyOrigin();
     policy.AllowAnyMethod();
     policy.AllowAnyHeader();
-    }));
+}));
 
 builder.Services.AddLogging(x => x.AddFile("Logs/mylog-{Date}.txt", LogLevel.Error));
-builder.Services.AddDbContext<MarketDbContext>(options=>options.UseSqlServer(builder.Configuration.GetConnectionString("connect")));
+builder.Services.AddDbContext<MarketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connect")));
 builder.Services.AddAutoMapper(typeof(Mapping));
 
+builder.Services.AddControllers().AddJsonOptions(
+    x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
-builder.Services.AddScoped<IAccount,AccountService>();
-builder.Services.AddScoped<ICrossAccountRole,CrossAccountRoleService>();
-builder.Services.AddScoped<IItem,ItemService>();
+
+builder.Services.AddScoped<IAccount, AccountService>();
+builder.Services.AddScoped<ICrossAccountRole, CrossAccountRoleService>();
+builder.Services.AddScoped<IItem, ItemService>();
+builder.Services.AddScoped<IRole, RoleService>();
+builder.Services.AddScoped<IPaper, PaperService>();
+builder.Services.AddScoped<IIncluded, IncludedService>();
+builder.Services.AddScoped<ICash, CashService>();
+builder.Services.AddScoped<ISale, SaleService>();
+
 builder.Services.AddScoped<JWTTokenService>();
+builder.Services.AddScoped<ItemFilterDto>();
 
 
 

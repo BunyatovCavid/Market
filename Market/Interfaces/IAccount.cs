@@ -8,10 +8,14 @@ namespace Market.Interfaces
 {
     public interface IAccount
     {
-        public Task<RegisterDto> CreateAccountAsync(LoginDto dto);
-        public  Task<ICollection<Account>> DeleteAccountAsync(int id);
-        public  Task<Account> GetAccountAsync(int id);
-        public  Task<ICollection<Account>> GetAccountAsync();
-        public Task<ICollection<Account>> PutAccountAsync(AccountPutDto dto);
+        public Task<ICollection<AccountGetDto>> GetAccountAsync();
+        public Task<ICollection<AccountGetDto>> GetAllAccountAsync();
+        public Task<AccountGetDto> GetAccountByNameAsync(string name);
+            
+        public Task<ICollection<AccountGetDto>> CreateAccountAsync(LoginDto dto);
+        public Task<ICollection<AccountGetDto>> DeleteAccountAsync(string name);
+        public Task<ICollection<AccountGetDto>> PutAccountAsync(AccountPutDto dto);
+
+
     }
 }

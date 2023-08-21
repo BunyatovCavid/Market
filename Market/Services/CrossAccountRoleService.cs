@@ -13,11 +13,12 @@ namespace Market.Services
     {
         private readonly IMapper _mapper;
         private readonly MarketDbContext _db;
-
-        public CrossAccountRoleService(IMapper mapper, MarketDbContext db)
+        private readonly IRole _Role;
+        public CrossAccountRoleService(IMapper mapper, MarketDbContext db, IRole role)
         {
             _db = db;
             _mapper = mapper;
+            _Role = role;
         }
         public async Task<ICollection<AccountGetDto>> GetAccountsAsync()
         {
@@ -28,19 +29,22 @@ namespace Market.Services
         public async Task<ICollection<AccountGetDto>> PostAccountRoleAsync(Cross_Account_RoleDto dto)
         {
             var check = await GetAccountByIdAsync(dto.AccountId);
+            var check_Role = await _Role.GetRoleByIdAsync(new RoleDto { Id=dto.RoleId });
             ICollection<AccountGetDto> response = null;
             if (check != null)
             {
-                var data = new Account()
-                {
-                     Description = "IsCreate",
-                    Cross_Account_Role = new HashSet<Cross_Account_Role>() {
-                    new() { RoleId = dto.RoleId }
-               }
-                };
-                await _db.AddAsync(data);
-
-                await _db.SaveChangesAsync();
+                Cross_Account_Role request = new() { AccountId = dto.AccountId, RoleId = dto.RoleId };
+                await _db.Cross_Account_Role.AddAsync(request);
+               // var data = new Account()
+               // {
+               //      Description = "IsCreate",
+               //     Cross_Account_Role = new HashSet<Cross_Account_Role>() {
+               //     new() { RoleId = dto.RoleId }
+               //}
+               // };
+               // check.Cross_Account_Role.Add(new Cross_Account_Role { AccountId=dto.AccountId, RoleId=dto.RoleId});
+               
+                 await _db.SaveChangesAsync();
 
                  response = await GetAccountsAsync();
             }

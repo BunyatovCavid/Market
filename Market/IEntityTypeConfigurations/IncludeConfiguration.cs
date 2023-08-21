@@ -8,6 +8,7 @@ namespace Market.IEntityTypeConfigurations
     {
         public void Configure(EntityTypeBuilder<Included> builder)
         {
+            builder.Property(a => a.Description).HasMaxLength(12);
             builder.Property(a => a.ItemId).IsRequired();
             builder.Property(a => a.PaperId).IsRequired();
         }

@@ -8,6 +8,7 @@ namespace Market.Domain
     public class MarketDbContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
+        public DbSet<Cross_Account_Role> Cross_Account_Role { get; set; }
         public DbSet<Role> Roles { get; set; }
         public DbSet<Bonus_Card> Bonus_Cards { get; set; }
         public DbSet<Bonus_Card_Report> Bonus_Card_Reports { get; set; }
