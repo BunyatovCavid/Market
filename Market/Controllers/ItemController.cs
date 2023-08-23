@@ -145,8 +145,8 @@ namespace Market.Controllers
             return BadRequest(response);
         }
 
-        [HttpDelete("DeleteItem")]
-        public async Task<IActionResult> DeleteItem([FromQuery] int Number)
+        [HttpDelete("DeletePaper")]
+        public async Task<IActionResult> DeletePaper([FromQuery] int Number)
         {
                 var data = await _paper.DeletePaper(Number);
                 if (data != null)

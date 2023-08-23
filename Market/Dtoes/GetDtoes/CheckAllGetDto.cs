@@ -1,13 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Market.Domain.Entities
+﻿namespace Market.Dtoes.GetDtoes
 {
-    public class Check
+    public class CheckAllGetDto
     {
-        public Check()
-        {
-            Sales = new HashSet<Sale>();
-        }
         public int Id { get; set; }
         public int CheckNumber { get; set; }
         public int? Bonus_CardId { get; set; }
@@ -22,11 +16,5 @@ namespace Market.Domain.Entities
         public DateTime Date { get; set; }
         public int AccountId { get; set; }
 
-
-        public ICollection<Sale> Sales { get; set; }
-        public Bonus_Card Bonus_Card { get; set; }
-        public Discount_Card Discount_Card { get; set; }
-        public Account Account { get; set; }
-        public Cash Cash { get; set; }
     }
 }

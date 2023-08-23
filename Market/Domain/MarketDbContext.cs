@@ -1,5 +1,6 @@
 ﻿using Market.Domain.Entities;
 using Market.Domain.Entities.Cross;
+using Market.Domain.Entities.Visuals;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
@@ -23,6 +24,8 @@ namespace Market.Domain
         public DbSet<Cash> Cashes { get; set; }
         public DbSet<Check> Checks { get; set; }
         public DbSet<Sale> Sales { get; set; }
+        public DbSet<SaleVisual> SaleVisuals { get; set; }
+        public DbSet<CheckVisual> CheckVisuals { get; set; }
 
         public MarketDbContext(DbContextOptions<MarketDbContext> options) :base(options)
         {

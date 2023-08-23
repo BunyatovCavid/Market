@@ -52,22 +52,6 @@ namespace Market.Services
             return response;
         }
 
-        public async Task<ICollection<SaleGetDto>> AddSale(SaleGetDto dto)
-        {
-            var data = await GetSaleById(dto.Id);
-            Sale request = new();
-            if (data == null)
-            {
-                request = _mapper.Map<Sale>(dto);
-                await _db.AddAsync(request);
-            }
-            else
-            {
-                request.Amount += data.Amount * dto.Number;
-            }
-            var response = await GetSales(dto.Id);
-            return response;
-        }
 
         public async Task<ICollection<SaleGetDto>> PutSale(SaleGetDto dto)
         {
@@ -93,5 +77,9 @@ namespace Market.Services
             return response;
         }
 
+        public Task<ICollection<SaleGetDto>> AddSale(SaleGetDto dto)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

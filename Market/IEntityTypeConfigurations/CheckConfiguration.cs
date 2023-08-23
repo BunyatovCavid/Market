@@ -15,7 +15,7 @@ namespace Market.IEntityTypeConfigurations
             builder.HasMany(c => c.Sales)
                 .WithOne(s => s.Check)
                 .HasForeignKey(s => s.CheckId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
             builder.HasOne(c => c.Bonus_Card)

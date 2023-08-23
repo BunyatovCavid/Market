@@ -44,11 +44,17 @@ builder.Services.AddScoped<IItem, ItemService>();
 builder.Services.AddScoped<IRole, RoleService>();
 builder.Services.AddScoped<IPaper, PaperService>();
 builder.Services.AddScoped<IIncluded, IncludedService>();
+builder.Services.AddScoped<ICheck, CheckService>();
 builder.Services.AddScoped<ICash, CashService>();
 builder.Services.AddScoped<ISale, SaleService>();
+builder.Services.AddScoped<IDiscount_Card, DiscountService>();
+builder.Services.AddScoped<IBonus_Card, Bonus_CardService>();
+builder.Services.AddScoped<ICategory, CategoryService>();
+builder.Services.AddScoped<ISub_Category, Sub_CategoryService>();
 
 builder.Services.AddScoped<JWTTokenService>();
-builder.Services.AddScoped<ItemFilterDto>();
+builder.Services.AddSingleton<ItemFilterDto>();
+builder.Services.AddScoped<Response>();
 
 
 

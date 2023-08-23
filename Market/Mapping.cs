@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Market.Domain.Entities;
+using Market.Domain.Entities.Visuals;
 using Market.Dtoes;
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.Post_Dtoes;
@@ -42,6 +43,10 @@ namespace Market
 
             CreateMap<CheckPostDto, Check>();
             CreateMap<Check, CheckGetDto>();
+            CreateMap<CheckVisual, Check>();
+            CreateMap<CheckVisual, CheckGetDto>();
+            CreateMap<CheckGetDto, CheckVisual>();
+            CreateMap<CheckPostDto, CheckVisual>();
             CreateMap<CheckGetDto, Check>();
 
 
@@ -58,6 +63,19 @@ namespace Market
 
             CreateMap<Bonus_Card_Report, Bonus_Card_ReportGetDto>();
             CreateMap<Bonus_CardPostDto, Bonus_Card_Report>();
+
+
+            CreateMap<Category, CategoryGetDto>();
+            CreateMap<Category, CategoryAllGetDto>();
+            CreateMap<Category, CategoryBySub_CategoryGetDto>();
+            CreateMap<CategoryPostDto, Category>();
+            CreateMap<CategoryPutDto, Category>();
+
+            CreateMap<Sub_Category, Sub_CategoryAllGetDto>();
+            CreateMap<Sub_Category, Sub_CategoryGetDto>();
+            CreateMap<Sub_CategoryPostDto, Sub_Category>();
+            CreateMap<Sub_CategoryPutDto, Sub_Category>();
+            
 
         }
     }

@@ -11,8 +11,6 @@
         public int? Bonus_Amount { get; set; }
         public float? Final_Amount { get; set; }
         public int CashId { get; set; }
-        public string? Description { get; set; }
         public DateTime Date { get; set; }
-        public int AccountId { get; set; }
     }
 }

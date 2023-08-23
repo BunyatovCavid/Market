@@ -4,6 +4,7 @@ using Market.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Migrations
 {
     [DbContext(typeof(MarketDbContext))]
-    partial class MarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230823084710_mig_4")]
+    partial class mig_4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -57,9 +59,6 @@ namespace Market.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Amount")
                         .HasColumnType("int");
 
                     b.Property<int>("Barkod")
@@ -668,9 +667,6 @@ namespace Market.Migrations
                     b.Property<int>("CheckNumber")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<int?>("Discount_CardId")
                         .HasColumnType("int");
 
@@ -683,38 +679,6 @@ namespace Market.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("CheckVisuals");
-                });
-
-            modelBuilder.Entity("Market.Domain.Entities.Visuals.SaleVisual", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<float>("Amount")
-                        .HasColumnType("real");
-
-                    b.Property<int>("CheckVisualId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ItemId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CheckVisualId");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("SaleVisuals");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Bonus_Card", b =>
@@ -860,7 +824,7 @@ namespace Market.Migrations
                     b.HasOne("Market.Domain.Entities.Paper", "Paper")
                         .WithMany("Includeds")
                         .HasForeignKey("PaperId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Item");
@@ -952,25 +916,6 @@ namespace Market.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("Market.Domain.Entities.Visuals.SaleVisual", b =>
-                {
-                    b.HasOne("Market.Domain.Entities.Visuals.CheckVisual", "CheckVisual")
-                        .WithMany("SaleVisuals")
-                        .HasForeignKey("CheckVisualId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Market.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CheckVisual");
-
-                    b.Navigation("Item");
-                });
-
             modelBuilder.Entity("Market.Domain.Entities.Account", b =>
                 {
                     b.Navigation("Bonus_Card_Reports");
@@ -1056,11 +1001,6 @@ namespace Market.Migrations
             modelBuilder.Entity("Market.Domain.Entities.Sub_Category", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Market.Domain.Entities.Visuals.CheckVisual", b =>
-                {
-                    b.Navigation("SaleVisuals");
                 });
 #pragma warning restore 612, 618
         }

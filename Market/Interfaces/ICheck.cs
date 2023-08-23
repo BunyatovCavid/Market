@@ -1,19 +1,30 @@
 ﻿using Market.Domain.Entities;
 using Market.Dtoes.Get_Dtoes;
+using Market.Dtoes.GetDtoes;
 using Market.Dtoes.Post_Dtoes;
+using Market.Dtoes.PostDtoes;
+using Market.Dtoes.PutDto;
 
 namespace Market.Interfaces
 {
     public interface ICheck
     {
 
-        public Task<ICollection<CheckGetDto>> GetChecks();
-        public Task<ICollection<CheckGetDto>> GetAllChecks();
-        public Task<CheckGetDto> GetCheckbyNumber(int Id);
-        public Task<CheckGetDto> CreateCheck(CheckPostDto dto);
-        public Task<ICollection<CheckGetDto>> PutCheck(CheckPostDto dto);
-        public Task<ICollection<CheckGetDto>> DeleteCheck(int Number);
-        public Task<ICollection<CheckGetDto>> SaveCheckByIncluded();
+        public Task<ICollection<CheckGetDto>> GetChecksAsync();
+        public Task<ICollection<CheckAllGetDto>> GetAllChecksAsync();
+        public Task<CheckGetDto> GetCheckbyNumberAsync(int Id);
+
+        public Task<CheckGetDto> CreateCheckAsync(CheckPostDto dto);
+        public Task<CheckGetDto> UseBonus_CardAsync(UseCardPostDto dto);
+        public Task<CheckGetDto> UseDiscount_CardAsync(UseCardPostDto dto);
+        public Task<CheckGetDto> AddAmountInCheckAsync(AddAmountPostDto dto);
+        public Task<CheckGetDto> SaveCheckByIncluded(int CheckId);
+
+
+        public Task<ICollection<CheckGetDto>> DeleteCheckAsync(int Number);
+        public Task<ICollection<CheckAllGetDto>> DeleteCheckRealAsync(int Number);
+        public Task<ICollection<CheckAllGetDto>> ReturnCheckAsync(int Number);
+
 
 
     }

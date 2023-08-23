@@ -13,6 +13,7 @@ namespace Market.Domain.Entities
         public string Name { get; set; }
         public string Phone { get; set; }
         public int Bonus { get; set; }
+        public int Amount { get; set; }
         public string? Description { get; set; }
         public DateTime Date { get; set; }
         public int AccountId { get; set; }

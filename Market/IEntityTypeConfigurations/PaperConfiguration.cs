@@ -17,7 +17,7 @@ namespace Market.IEntityTypeConfigurations
             builder.HasMany(p => p.Includeds)
                  .WithOne(i => i.Paper)
                  .HasForeignKey(i => i.PaperId)
-                 .OnDelete(DeleteBehavior.NoAction);
+                 .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasAlternateKey(p => p.Paper_Number);
         }
