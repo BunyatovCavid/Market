@@ -26,7 +26,6 @@ namespace Market.Services
             foreach (var item in data)
             {
                 request = _mapper.Map<IncludedGetDto>(item);
-                request.ItemName = item.Item.Name;
                 response.Add(request);
             }
             return response;
@@ -66,12 +65,13 @@ namespace Market.Services
         public async Task<ICollection<IncludedGetDto>> DeleteIncluded(int Id)
         {
             var data = await GetInculededById(Id);
+            ICollection<IncludedGetDto> response = null;
             if (data != null)
             {
                 data.Description = "IsDelete";
                 await _db.SaveChangesAsync();
+                response = await GetPaperInculededsByNumber(data.PaperId);
             }
-            var response = await GetPaperInculededsByNumber(data.PaperId);
             return response;
         }
 

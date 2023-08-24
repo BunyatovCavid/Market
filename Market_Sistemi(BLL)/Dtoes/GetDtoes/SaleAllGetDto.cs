@@ -6,6 +6,6 @@
         public int Number { get; set; }
         public float Amount { get; set; }
         public int CheckId { get; set; }
-        public string Description { get; set; }
+        public string? Description { get; set; }
     }
 }

@@ -30,7 +30,23 @@ namespace Market.Controllers
             var data = await _bonus.GetBonus_CardAsync();
             var response = await _response.GetResponse(data);
             return response;
+        }
 
+        [HttpGet("GetAllBonus_CardAsync")]
+        [Authorize("Developer,Boss")]
+        public async Task<IActionResult> GetAllBonus_CardAsync()
+        {
+            var data = await _bonus.GetAllBonus_CardAsync();
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+
+        [HttpGet("GetAllBonus_CardReportAsync")]
+        public async Task<IActionResult> GetAllBonus_CardReportAsync()
+        {
+            var data = await _bonus.GetAllBonus_CardReportAsync();
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpPost("CreateBonus_Card")]
@@ -81,8 +97,21 @@ namespace Market.Controllers
             return response;
         }
 
+        [HttpDelete("DeleteBonus_CardRealAsync")]
+        public async Task<IActionResult> DeleteBonus_CardRealAsync([FromQuery] int Id)
+        {
+            var data = await _bonus.DeleteBonus_CardRealAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
 
-
+        [HttpDelete("DeleteBonus_Card_ReportRealAsync")]
+        public async Task<IActionResult> DeleteBonus_Card_ReportRealAsync([FromQuery] int Id,[FromQuery]int Barkod)
+        {
+            var data = await _bonus.DeleteBonus_Card_ReportRealAsync(Id,Barkod);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
 
     }
 }

@@ -65,7 +65,10 @@ namespace Market.Services
             {
                 data.Paper_Number = 1;
             }
-            data.Paper_Number = number.Paper_Number + 1;
+            else
+            {
+                data.Paper_Number = number.Paper_Number + 1;
+            }
             await _db.Papers.AddAsync(data);
 
 

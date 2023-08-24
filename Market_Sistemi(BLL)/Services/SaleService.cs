@@ -9,6 +9,8 @@ using Market.Dtoes.PutDto;
 using Market.Domain.Entities.Visuals;
 using Market.Dtoes.PostDtoes;
 using AutoMapper.Execution;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 
 namespace Market.Services
 {
@@ -73,7 +75,7 @@ namespace Market.Services
         }
         private async Task<Sale> GetSaleForDelete(int Id)
         {
-            var data = await _db.Sales.FirstOrDefaultAsync(s=>s.Id==Id);
+            var data = await _db.Sales.FirstOrDefaultAsync(s => s.Id == Id);
             return data;
         }
         private async Task<Sale> GetSaleByIdForDelete(int Id)
@@ -84,33 +86,37 @@ namespace Market.Services
         public async Task<ICollection<SaleGetDto>> DeleteSaleAsync(int Id)
         {
             var data = await GetSaleForDelete(Id);
+            ICollection<SaleGetDto> response = null;
             if (data != null)
             {
                 data.Description = "IsDelete";
                 await _db.SaveChangesAsync();
+                response = await GetSalesAsync(data.CheckId);
             }
-            var response = await GetSalesAsync(data.CheckId);
             return response;
         }
         public async Task<ICollection<SaleAllGetDto>> DeleteSaleRealAsync(int Id)
         {
             var data = await GetSaleByIdForDelete(Id);
+            ICollection<SaleAllGetDto> response = null;
             if (data != null)
             {
                 _db.Sales.Remove(data);
                 await _db.SaveChangesAsync();
+
+                response = await GetAllSalesAsync(data.CheckId);
             }
-            var response = await GetAllSalesAsync(data.CheckId);
             return response;
         }
         public async Task<ICollection<SaleGetDto>> ReturnSaleAsync(int Id)
         {
             var data = await GetSaleByIdForDelete(Id);
-            if(data!=null&&data.Description =="IsDelete")
+            ICollection<SaleGetDto> response = null;
+            if (data != null && data.Description == "IsDelete")
             {
                 data.Description = "ReturnData";
+                response = await GetSalesAsync(data.CheckId);
             }
-            var response = await GetSalesAsync(data.CheckId);
             return response;
         }
 
@@ -137,16 +143,19 @@ namespace Market.Services
         {
             var check = await _db.SaleVisuals.FirstOrDefaultAsync(s => s.CheckId == dto.CheckId && s.ItemId == dto.ItemId);
             var item = await _db.Items.FirstOrDefaultAsync(i => i.Id == dto.ItemId);
-            if (check != null)
+            if (check != null && item!=null)
             {
                 check.Number += dto.Number;
                 check.Amount += dto.Number * item.Amount;
             }
             else
             {
-                var data = _mapper.Map<SaleVisual>(dto);
-                data.Amount = data.Number * item.Amount;
-                await _db.SaleVisuals.AddAsync(data);
+                if (item != null)
+                {
+                    var data = _mapper.Map<SaleVisual>(dto);
+                    data.Amount = data.Number * item.Amount;
+                    await _db.SaleVisuals.AddAsync(data);
+                }
             }
             await _db.SaveChangesAsync();
 
@@ -178,12 +187,13 @@ namespace Market.Services
         public async Task<ICollection<SaleGetDto>> DeleteSaleVisualAsync(int Id)
         {
             var data = await GetSaleVisualByIdForPut(Id);
+            ICollection<SaleGetDto> response = null;
             if (data != null)
             {
                 _db.SaleVisuals.Remove(data);
                 await _db.SaveChangesAsync();
+                response = await GetSaleVisualAsync(data.CheckId);
             }
-            var response = await GetSaleVisualAsync(data.CheckId);
             return response;
         }
 

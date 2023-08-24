@@ -91,11 +91,15 @@ namespace Market.Services
         public async Task<CategoryBySub_CategoryGetDto> GetCategoryBySubCategoryByIdAsync(int Id)
         {
             var data = await _db.Categories.Include(c => c.Sub_Categories).FirstOrDefaultAsync(c => c.Description != "IsDelete" && c.Id == Id);
-            CategoryBySub_CategoryGetDto response = _mapper.Map<CategoryBySub_CategoryGetDto>(data);
-            foreach (var item in data.Sub_Categories)
+            CategoryBySub_CategoryGetDto response = new();
+            if (data != null)
             {
-                if (item.Description == "IsDelete")
-                    response.Sub_Categories.Remove(item);
+               response= _mapper.Map<CategoryBySub_CategoryGetDto>(data);
+                foreach (var item in data.Sub_Categories)
+                {
+                    if (item.Description == "IsDelete")
+                        response.Sub_Categories.Remove(item);
+                }
             }
             return response;
         }

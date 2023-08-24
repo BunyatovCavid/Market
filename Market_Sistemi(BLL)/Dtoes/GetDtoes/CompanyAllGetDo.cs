@@ -12,6 +12,6 @@ namespace Market_Sistemi_BLL_.Dtoes.GetDtoes
         public string Name { get; set; }
         public DateTime Date { get; set; }
         public int AccountId { get; set; }
-        public string Descriptino { get; set; }
+        public string? Descriptino { get; set; }
     }
 }

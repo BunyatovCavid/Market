@@ -154,26 +154,31 @@ namespace Market.Services
         }
         private async Task<Check> GetCheckBySaleAndRemoveCheckVisualAsync(int CheckId)
         {
-                var data = await _db.CheckVisuals.Include(c => c.SaleVisuals).FirstOrDefaultAsync(c => c.CheckNumber == CheckId);
-                var response = _mapper.Map<Check>(data);
+            var data = await _db.CheckVisuals.Include(c => c.SaleVisuals).FirstOrDefaultAsync(c => c.CheckNumber == CheckId);
+            Check response = new();
+            if (data != null)
+            {
+                 response = _mapper.Map<Check>(data);
                 _db.CheckVisuals.Remove(data);
-                return response;
-    
+            }
+            return response;
+
         }
         public async Task<CheckGetDto> SaveCheckByIncluded(int CheckId)
         {
-            var data = await _db.CheckVisuals.FirstOrDefaultAsync(c=>c.CheckNumber==CheckId);
+            var data = await _db.CheckVisuals.FirstOrDefaultAsync(c => c.CheckNumber == CheckId);
+            CheckGetDto response = new();
             if (data != null)
             {
-                var request = _mapper.Map< Check > (data);
+                var request = _mapper.Map<Check>(data);
                 await _db.Checks.AddAsync(request);
 
                 Bonus_Card_ReportPostDto bonus_request = new() { Amount = Convert.ToInt32((data.Amount / 100) + data.Bonus_Amount), Barkod = Convert.ToInt32(data.Bonus_CardId), AccountId = data.AccountId };
                 await AddBonus(bonus_request);
 
                 await _db.SaveChangesAsync();
+                response = await GetCheckbyNumberAsync(data.CheckNumber);
             }
-            var response = await GetCheckbyNumberAsync(data.CheckNumber);
             return response;
         }
 

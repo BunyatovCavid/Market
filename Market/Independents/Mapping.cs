@@ -8,6 +8,7 @@ using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PostDtoes;
 using Market.Dtoes.PutDto;
 using Market_Sistemi_BLL_.Dtoes.GetDtoes;
+using Market_Sistemi_BLL_.Interfaces;
 
 namespace Market.Independents
 {
@@ -73,6 +74,7 @@ namespace Market.Independents
             CreateMap<Bonus_Card, Bonus_CardGetDto>();
             CreateMap<Bonus_CardPostDto, Bonus_Card>();
             CreateMap<Bonus_cardPutDto, Bonus_Card>();
+            CreateMap<Bonus_Card, Bonus_CardAllGetDto>();
 
             CreateMap<Bonus_Card_Report, Bonus_Card_ReportGetDto>();
             CreateMap<Bonus_CardPostDto, Bonus_Card_Report>();
