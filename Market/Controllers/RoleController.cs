@@ -1,6 +1,8 @@
 ﻿using Market.Dtoes;
 using Market.Dtoes.Post_Dtoes;
+using Market.Independents;
 using Market.Interfaces;
+using Market_Sistemi_BLL_.Dtoes;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -13,74 +15,61 @@ namespace Market.Controllers
     public class RoleController : ControllerBase
     {
         private readonly IRole _role;
-        public RoleController(IRole role)
+        private readonly Response _response;
+        public RoleController(IRole role, Response response)
         {
+            _response = response;
             _role = role;
         }
 
-        [HttpGet("GetRoles")]
-        public async Task<IActionResult> GetRoles()
+        [HttpGet("GetRolesAsync")]
+        public async Task<IActionResult> GetRolesAsync()
         {
+
             var data = await _role.GetRoleAsync();
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var response =  _response.GetResponse(data);
+            return response;
         }
 
-        [HttpGet("GetRoleByFilter")]
-        public async Task<IActionResult> GetRoleByFilter([FromQuery] RoleDto dto)
+        [HttpGet("GetRoleByFilterAsync")]
+        public async Task<IActionResult> GetRoleByFilterAsync([FromQuery] RoleDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _role.GetRoleByIdAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _role.GetRoleByIdAsync(dto);
+            var response = _response.GetResponse(data);
+            return response;
 
         }
 
-        [HttpPost("CreateRole")]
-        public async Task<IActionResult> CreateRole([FromQuery] RolePostDto dto)
+        [HttpPost("CreateRoleAsync")]
+        public async Task<IActionResult> CreateRoleAsync([FromQuery] RolePostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _role.PostRoleAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            return BadRequest(dto);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _role.PostRoleAsync(dto);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
-        [HttpPut("PutRole")]
-        public async Task<IActionResult> PutRole([FromQuery]RoleDto dto)
+        [HttpPut("PutRoleAsync")]
+        public async Task<IActionResult> PutRoleASync([FromQuery] RoleDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _role.PutRoleAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _role.PutRoleAsync(dto);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
-        [HttpDelete("DeleteRole")]
-        public async Task<IActionResult> DeleteRole([FromQuery]int id)
+        [HttpDelete("DeleteRoleAsync")]
+        public async Task<IActionResult> DeleteRoleAsync([FromQuery] AllOneNumberPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _role.DeleteRoleAsync(id);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _role.DeleteRoleAsync(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
     }

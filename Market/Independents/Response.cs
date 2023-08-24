@@ -6,13 +6,13 @@ namespace Market.Independents
 {
     public class Response : Controller
     {
-        public async Task<IActionResult> GetResponse<TEnity>(TEnity data) where TEnity : class
+        public IActionResult GetResponse<TEnity>(TEnity data) where TEnity : class
         {
             if (data != null)
                 return Ok(data);
             return NotFound();
         }
-        public async Task<IActionResult> CheckState<TEntity>(TEntity dto) where TEntity : class
+        public IActionResult CheckState<TEntity>(TEntity dto) where TEntity : class
         {
             if (!ModelState.IsValid)
             {

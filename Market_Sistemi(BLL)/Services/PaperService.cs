@@ -78,7 +78,7 @@ namespace Market.Services
 
         public async Task<ICollection<PaperGetDto>> PutPaper(PaperPutDto dto)
         {
-            var data = await GetPaperbyNumber(dto.Paper_Number);
+            var data = await GetPaperbyNumber(dto.PaperNumber);
             if (data != null)
             {
                 _mapper.Map(dto, data);

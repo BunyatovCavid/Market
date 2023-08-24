@@ -12,6 +12,7 @@ using System.Xml.Linq;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Market.Independents;
+using Market_Sistemi_BLL_.Dtoes;
 
 namespace Market.Controllers
 {
@@ -35,15 +36,15 @@ namespace Market.Controllers
 
         [HttpGet("Login")]
         [AllowAnonymous]
-        public async Task<IActionResult> Login([FromQuery] LoginDto dto)
+        public IActionResult Login([FromQuery] LoginDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
-            var data = await _token.LogIn(dto);
+            var data = _token.LogIn(dto);
             var request = JsonSerializer.Serialize(data);
 
-            var response = await _response.GetResponse(request);
+            var response = _response.GetResponse(request);
             return response;
         }
 
@@ -52,28 +53,31 @@ namespace Market.Controllers
         [Authorize("Boss")]
         public async Task<IActionResult> Register([FromQuery] LoginDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
             var data = await _account.CreateAccountAsync(dto);
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpGet("GetAccountByName")]
         [Authorize("Boss")]
-        public async Task<IActionResult> GetAccountByName([FromQuery] string Name)
+        public async Task<IActionResult> GetAccountByName([FromQuery] AllOneNamePostDto dto)
         {
-            var data = await _account.GetAccountByNameAsync(Name);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _account.GetAccountByNameAsync(dto.Name);
+            var response = _response.GetResponse(data);
             return response;
         }
         [HttpGet("GetAccount")]
         [Authorize("Boss")]
         public async Task<IActionResult> GetAccount()
         {
+
             var data = await _account.GetAccountAsync();
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
         [HttpGet("GetAllAccount")]
@@ -81,7 +85,7 @@ namespace Market.Controllers
         public async Task<IActionResult> GetAllAccount()
         {
             var data = await _account.GetAllAccountAsync();
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 
@@ -89,39 +93,45 @@ namespace Market.Controllers
         [Authorize("Boss")]
         public async Task<IActionResult> PutAccount([FromQuery] AccountPutDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return null;
 
             var data = await _account.PutAccountAsync(dto);
 
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpDelete("DeleteAccount")]
         [Authorize("Boss")]
-        public async Task<IActionResult> DeleteAccount([FromQuery] int Id)
+        public async Task<IActionResult> DeleteAccount([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _account.DeleteAccountAsync(Id);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _account.DeleteAccountAsync(dto.Id);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpDelete("DeleteAccountReal")]
         [Authorize("Boss")]
-        public async Task<IActionResult> DeleteAccountReal([FromQuery] int Id)
+        public async Task<IActionResult> DeleteAccountReal([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _account.DeleteAccountRealAsync(Id);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _account.DeleteAccountRealAsync(dto.Id);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpPut("ReturnAccount")]
         [Authorize("Boss")]
-        public async Task<IActionResult> ReturnAccount([FromQuery] int Id)
+        public async Task<IActionResult> ReturnAccount([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _account.ReturnAccountAsync(Id);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _account.ReturnAccountAsync(dto.Id);
+            var response = _response.GetResponse(data);
             return response;
 
         }
@@ -136,16 +146,18 @@ namespace Market.Controllers
         public async Task<IActionResult> GetCross()
         {
             var data = await _cross.GetCrossAsync();
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 
-        [HttpGet("GetCrossById")]
+        [HttpGet("GetCrossBydto")]
         [Authorize("Boss")]
-        public async Task<IActionResult> GetCrossById(int id)
+        public async Task<IActionResult> GetCrossById(AllOneNumberPostDto dto)
         {
-            var data = await _cross.GetCrossByIdAsync(id);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _cross.GetCrossByIdAsync(dto.Id);
+            var response = _response.GetResponse(data);
             return response;
         }
 
@@ -153,51 +165,53 @@ namespace Market.Controllers
         [Authorize("Boss")]
         public async Task<IActionResult> CreateCross([FromQuery] Cross_Account_RoleDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
             var data = await _cross.PostCrossAsync(dto);
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
         [HttpDelete("DeleteCross")]
         [Authorize("Boss")]
         public async Task<IActionResult> DeleteCross([FromQuery] Cross_Account_RoleDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
             var data = await _cross.DeleteCrossAsync(dto);
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpGet("GetOwnerCrossById")]
-        public async Task<IActionResult> GetOwnerByIddCross(int Id)
+        public async Task<IActionResult> GetOwnerByIddCross(AllOneNumberPostDto dto)
         {
-            var data = await _cross.GetOwnerCrossByIdAsync(Id);
-            var response = await _response.GetResponse(data);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _cross.GetOwnerCrossByIdAsync(dto.Id);
+            var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpPost("CreateOwnerCross")]
         public async Task<IActionResult> CreateOwnerCross([FromQuery] Cross_Account_RoleDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
             var data = await _cross.PostOwnerCrossAsync(dto);
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
         [HttpDelete("DeleteOwnerCross")]
         public async Task<IActionResult> DeleteOwnerCross([FromQuery] Cross_Account_RoleDto dto)
         {
-            var check = await _response.CheckState(dto);
+            var check = _response.CheckState(dto);
             if (check != null) return check;
 
             var data = await _cross.DeleteOwnerCrossAsync(dto);
-            var response = await _response.GetResponse(data);
+            var response = _response.GetResponse(data);
             return response;
         }
 

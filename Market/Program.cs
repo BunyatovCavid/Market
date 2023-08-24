@@ -22,6 +22,8 @@ builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsF
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddDbContext<MarketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connect")));
+
 
 builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy =>
 {
@@ -31,11 +33,7 @@ builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy =>
 }));
 
 builder.Services.AddLogging(x => x.AddFile("Logs/mylog-{Date}.txt", LogLevel.Error));
-builder.Services.AddDbContext<MarketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connect")));
 builder.Services.AddAutoMapper(typeof(Mapping));
-
-builder.Services.AddControllers().AddJsonOptions(
-    x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.Preserve);
 
 
 builder.Services.AddScoped<IAccount, AccountService>();
@@ -54,7 +52,7 @@ builder.Services.AddScoped<ISub_Category, Sub_CategoryService>();
 
 builder.Services.AddScoped<JWTTokenService>();
 builder.Services.AddSingleton<ItemFilterDto>();
-builder.Services.AddScoped<Response>();
+builder.Services.AddSingleton<Response>();
 
 
 

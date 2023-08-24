@@ -4,6 +4,7 @@ using Market.Domain.Entities;
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.PutDto;
 using Market.Interfaces;
+using Market_Sistemi_BLL_.Dtoes.PostDtoes;
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.Services
@@ -41,9 +42,9 @@ namespace Market.Services
             var data = await _db.Items.Where(i =>
                  dto.Barkod != null ? i.Barkod == dto.Barkod : i.Barkod != 0 &&
                  dto.Name != null ? i.Name == dto.Name : i.Name != "" &&
-                 dto.Category != null ? i.CategoryId == dto.Category : i.CategoryId != 0 &&
-                 dto.Company != null ? i.CompanyId == dto.Company : i.CompanyId != 0 &&
-                 dto.Sub_Category != null ? i.Sub_CategoryId == dto.Sub_Category : i.Sub_CategoryId != 0 &&
+                 dto.CategoryId != null ? i.CategoryId == dto.CategoryId : i.CategoryId != 0 &&
+                 dto.CompanyId != null ? i.CompanyId == dto.CompanyId : i.CompanyId != 0 &&
+                 dto.Sub_CategoryId != null ? i.Sub_CategoryId == dto.Sub_CategoryId : i.Sub_CategoryId != 0 &&
                  dto.Before_Date != null ? dto.After_Date != null ? i.Date > dto.Before_Date && i.Date < dto.After_Date : i.Date > dto.Before_Date : i.Date != null
                  ).ToListAsync();
 
@@ -63,12 +64,13 @@ namespace Market.Services
 
         }
 
-        public async Task<ICollection<ItemGetDto>> CreateItemAsync(ItemGetDto dto)
+        public async Task<ICollection<ItemGetDto>> CreateItemAsync(ItemPostDto dto)
         { 
             var check = await GetItemsByFilter(new ItemFilterDto { Name =dto.Name, Barkod = dto.Barkod});
             if (check.Count == 0)
             {
                 var data = _mapper.Map<Item>(dto);
+                data.Date = DateTime.Now;
                 await _db.AddAsync(data);
                 await _db.SaveChangesAsync();
             }
@@ -77,7 +79,7 @@ namespace Market.Services
 
         }
 
-        public async Task<ICollection<ItemGetDto>> Put(ItemPutDto dto, ItemGetDto putdto)
+        public async Task<ICollection<ItemGetDto>> PutItemAsync(ItemPutDto dto, ItemPostDto putdto)
         {
             var data = await GetItemsByFilter(new ItemFilterDto() { Barkod = dto.Barkod,Name = dto.Name});
             if (data != null)

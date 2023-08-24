@@ -13,7 +13,6 @@
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.20" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.20" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.20">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -22,10 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Market_Sistemi(DAL)\Market_Sistemi(DAL).csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="FluentValidations\" />
   </ItemGroup>
 
 </Project>

@@ -25,13 +25,17 @@ namespace Market.Domain
         public DbSet<Sale> Sales { get; set; }
         public DbSet<SaleVisual> SaleVisuals { get; set; }
         public DbSet<CheckVisual> CheckVisuals { get; set; }
+        public MarketDbContext()
+        {
+            
+        }
 
         public MarketDbContext(DbContextOptions<MarketDbContext> options) :base(options)
         {
 
         }
-
-
+   
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

@@ -2,8 +2,12 @@
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
+using Market.Independents;
 using Market.Interfaces;
+using Market_Sistemi_BLL_.Dtoes;
+using Market_Sistemi_BLL_.Dtoes.PostDtoes;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System.Collections;
 
@@ -16,142 +20,122 @@ namespace Market.Controllers
         private readonly IItem _item;
         private readonly IPaper _paper;
         private readonly IIncluded _included;
-        public ItemController(IItem item, IPaper paper, IIncluded included)
+        private readonly Response _response;
+        public ItemController(IItem item, IPaper paper, IIncluded included, Response response)
         {
             _item = item;
             _paper = paper;
             _included = included;
+            _response = response;
         }
 
         [HttpGet("GetItems")]
         public async Task<IActionResult> GetItems([FromQuery] ItemFilterDto dto)
         {
-            if (ModelState.IsValid)
+            if (dto == null)
             {
-                if (dto == null)
-                {
-                    dto = new ItemFilterDto();
-                }
-                var data = await _item.GetItemsByFilter(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
+                dto = new ItemFilterDto();
             }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _item.GetItemsByFilter(dto);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
         [HttpPost("CreateItem")]
-        public async Task<IActionResult> CreateItem([FromQuery] ItemGetDto dto)
+        public async Task<IActionResult> CreateItem([FromQuery] ItemPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _item.CreateItemAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _item.CreateItemAsync(dto);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
         [HttpPut("PutItem")]
-        public async Task<IActionResult> PutItem([FromQuery] ItemPutDto dto, [FromQuery] ItemGetDto putdto)
+        public async Task<IActionResult> PutItem([FromQuery] ItemPutDto dto, [FromQuery] ItemPostDto putdto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _item.Put(dto, putdto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(putdto);
+            if (check != null) return check;
+            var data = await _item.PutItemAsync(dto, putdto);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
 
         [HttpDelete("DeleteItem")]
         public async Task<IActionResult> DeleteItem([FromQuery] ItemPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _item.Delete(new ItemFilterDto { Barkod = dto.Barkod, Name = dto.Name });
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _item.Delete(new ItemFilterDto() { Barkod = dto.Barkod, Name = dto.Name });
+            var response = _response.GetResponse(data);
+            return response;
+            
         }
 
 
+        //Paper
 
 
         [HttpGet("GetPapers")]
         public async Task<IActionResult> GetPapers()
         {
-
             var data = await _paper.GetPapers();
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var response = _response.GetResponse(data);
+            return response;
         }
 
 
         [HttpGet("GetAllPaper")]
         public async Task<IActionResult> GetAllPaper()
         {
-
             var data = await _paper.GetAllPapers();
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var response = _response.GetResponse(data);
+            return response;
         }
 
         [HttpGet("GetPaperbyNumber")]
-        public async Task<IActionResult> GetPaperByNumber([FromQuery] int Number)
+        public async Task<IActionResult> GetPaperByNumber([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _paper.GetPaperbyNumber(Number);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _paper.GetPaperbyNumber(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
+            
         }
 
         [HttpPost("CreatePaper")]
         public async Task<IActionResult> CreatePaper([FromQuery] PaperPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _paper.CreatePaper(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _paper.CreatePaper(dto);
+            var response = _response.GetResponse(data);
+            return response;
+            
         }
 
         [HttpPut("PutPaper")]
         public async Task<IActionResult> PutPaper([FromQuery] PaperPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _paper.PutPaper(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _paper.PutPaper(dto);
+            var response = _response.GetResponse(data);
+            return response;
+            
         }
 
         [HttpDelete("DeletePaper")]
-        public async Task<IActionResult> DeletePaper([FromQuery] int Number)
+        public async Task<IActionResult> DeletePaper([FromQuery] AllOneNumberPostDto dto)
         {
-                var data = await _paper.DeletePaper(Number);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _paper.DeletePaper(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
+            
         }
 
         [HttpGet("SavePaper")]
@@ -159,68 +143,71 @@ namespace Market.Controllers
         {
 
             var data = await _paper.SavePaperByIncluded();
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var response = _response.GetResponse(data);
+            return response;
         }
 
 
+        //Include
 
 
         [HttpGet("GetPaperInculededsByNumber")]
-        public async Task<IActionResult> GetPaperInculededsByNumber([FromQuery] int Number)
+        public async Task<IActionResult> GetPaperInculededsByNumber([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _included.GetPaperInculededsByNumber(Number);
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _included.GetPaperInculededsByNumber(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
 
         [HttpGet("GetIncludedById")]
-        public async Task<IActionResult> GetIncludedById([FromQuery] int Id)
+        public async Task<IActionResult> GetIncludedById([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _included.GetInculededById(Id);
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _included.GetInculededById(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
         }
 
         [HttpPost("AddIncluded")]
         public async Task<IActionResult> AddIncluded([FromQuery] IncludedGetDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _included.AddIncluded(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _included.AddIncluded(dto);
+            var response = _response.GetResponse(data);
+            return response;
+            
+
         }
 
         [HttpPut("PutIncluded")]
         public async Task<IActionResult> PutIncluded([FromQuery] IncludedGetDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _included.PutIncluded(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _included.PutIncluded(dto);
+            var response = _response.GetResponse(data);
+            return response;
+            
+
         }
 
         [HttpDelete("DeleteIncluded")]
-        public async Task<IActionResult> DeleteIncluded([FromQuery] int Number)
+        public async Task<IActionResult> DeleteIncluded([FromQuery] AllOneNumberPostDto dto)
         {
-            var data = await _included.DeleteIncluded(Number);
-            if (data != null)
-                return Ok(data);
-            return NotFound();
+            var check = _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _included.DeleteIncluded(dto.Id);
+            var response = _response.GetResponse(data);
+            return response;
+            
+
         }
     }
 }

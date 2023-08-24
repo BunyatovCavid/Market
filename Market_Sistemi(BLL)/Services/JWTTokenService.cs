@@ -28,7 +28,7 @@ namespace Market.Services
             var data = await _db.Accounts.FirstOrDefaultAsync(b => b.Name == dto.Name && b.Password == dto.Password);
             return data;
         }
-        public async Task<string> LogIn(LoginDto dto)
+        public string LogIn(LoginDto dto)
         {
             var user = GetUserAsync(dto);
             if (user != null)

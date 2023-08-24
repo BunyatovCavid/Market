@@ -6,5 +6,6 @@
         public string Name { get; set; }
         public int CategoryId { get; set; }
         public bool Discount_Check { get; set; }
+        public int AccountId { get; set; }
     }
 }

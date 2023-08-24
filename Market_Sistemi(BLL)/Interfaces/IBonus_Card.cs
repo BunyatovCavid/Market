@@ -27,8 +27,8 @@ namespace Market.Interfaces
         public Task<Bonus_CardGetDto> CreateBonus_CardReportAsync(Bonus_Card_ReportPostDto dto);
 
         public Task<ICollection<Bonus_CardGetDto>> DeleteBonus_Card_ReportAsync(Bonus_Card_ReportDeleteDto dto);
-        public Task<Bonus_CardAllGetDto> DeleteBonus_Card_ReportRealAsync(int Id, int Barkod);
-        public Task<Bonus_CardAllGetDto> ReturnBonus_Card_ReportAsync(int Barkod, int Id);
+        public Task<Bonus_CardAllGetDto> DeleteBonus_Card_ReportRealAsync(AllTwoNumberPostDto dto);
+        public Task<Bonus_CardAllGetDto> ReturnBonus_Card_ReportAsync(AllTwoNumberPostDto dto);
 
 
     }
