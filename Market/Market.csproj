@@ -23,7 +23,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="FluentValidations\" />
+    <ProjectReference Include="..\Market_Sistemi(BLL)\Market_Sistemi(BLL).csproj" />
+    <ProjectReference Include="..\Market_Sistemi(DAL)\Market_Sistemi(DAL).csproj" />
   </ItemGroup>
 
 </Project>

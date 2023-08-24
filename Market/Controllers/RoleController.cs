@@ -1,13 +1,15 @@
 ﻿using Market.Dtoes;
 using Market.Dtoes.Post_Dtoes;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Market.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize("Developer")]
     public class RoleController : ControllerBase
     {
         private readonly IRole _role;

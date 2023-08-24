@@ -11,180 +11,195 @@ using System.Text.Json;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
+using Market.Independents;
 
 namespace Market.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize("Developer")]
     public class AccountController : ControllerBase
     {
         private readonly IAccount _account;
         private readonly JWTTokenService _token;
         private readonly ICrossAccountRole _cross;
-        public AccountController(IAccount account, JWTTokenService token, ICrossAccountRole cross)
+        private readonly Response _response;
+        public AccountController(IAccount account, JWTTokenService token, ICrossAccountRole cross, Response response)
         {
             _token = token;
             _account = account;
             _cross = cross;
-
+            _response = response;
         }
 
 
         [HttpGet("Login")]
+        [AllowAnonymous]
         public async Task<IActionResult> Login([FromQuery] LoginDto dto)
         {
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+
             var data = await _token.LogIn(dto);
-            var response = JsonSerializer.Serialize(data);
-            return Ok(response);
+            var request = JsonSerializer.Serialize(data);
+
+            var response = await _response.GetResponse(request);
+            return response;
         }
 
 
         [HttpPost("Register")]
+        [Authorize("Boss")]
         public async Task<IActionResult> Register([FromQuery] LoginDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _account.CreateAccountAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+
+            var data = await _account.CreateAccountAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpGet("GetAccountByName")]
+        [Authorize("Boss")]
         public async Task<IActionResult> GetAccountByName([FromQuery] string Name)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _account.GetAccountByNameAsync(Name);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _account.GetAccountByNameAsync(Name);
+            var response = await _response.GetResponse(data);
+            return response;
         }
         [HttpGet("GetAccount")]
+        [Authorize("Boss")]
         public async Task<IActionResult> GetAccount()
         {
-            if (ModelState.IsValid)
-            {
-                 var data = await _account.GetAccountAsync();
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _account.GetAccountAsync();
+            var response = await _response.GetResponse(data);
+            return response;
         }
         [HttpGet("GetAllAccount")]
+        [Authorize("Boss")]
         public async Task<IActionResult> GetAllAccount()
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _account.GetAllAccountAsync();
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _account.GetAllAccountAsync();
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpPut("PutAccount")]
+        [Authorize("Boss")]
         public async Task<IActionResult> PutAccount([FromQuery] AccountPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _account.PutAccountAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return null;
+
+            var data = await _account.PutAccountAsync(dto);
+
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpDelete("DeleteAccount")]
-        public async Task<IActionResult> DeleteAccount([FromQuery] string Name)
+        [Authorize("Boss")]
+        public async Task<IActionResult> DeleteAccount([FromQuery] int Id)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _account.DeleteAccountAsync(Name);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _account.DeleteAccountAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+
+        [HttpDelete("DeleteAccountReal")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> DeleteAccountReal([FromQuery] int Id)
+        {
+            var data = await _account.DeleteAccountRealAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+
+        [HttpPut("ReturnAccount")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> ReturnAccount([FromQuery] int Id)
+        {
+            var data = await _account.ReturnAccountAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+
         }
 
 
 
+        // Cross
 
 
-
-        [HttpGet("GetAccountByRole")]
-        public async Task<IActionResult> GetAccountByRole()
+        [HttpGet("GetCross")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> GetCross()
         {
-            
-            if (ModelState.IsValid)
-            {
-                var data = await _cross.GetAccountsAsync();
-                var _response = Newtonsoft.Json.JsonConvert.SerializeObject(data);
-                if (data != null)
-                    return Ok(_response);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _cross.GetCrossAsync();
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
-        [HttpGet("GetAccountRoleById")]
-        public async Task<IActionResult> GetAccountRoleById(int id)
+        [HttpGet("GetCrossById")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> GetCrossById(int id)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _cross.GetAccountByIdAsync(id);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _cross.GetCrossByIdAsync(id);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
-        [HttpPost("CreateAccountRole")]
-        public async Task<IActionResult> CreateAccountRole([FromQuery] Cross_Account_RoleDto dto)
+        [HttpPost("CreateCross")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> CreateCross([FromQuery] Cross_Account_RoleDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _cross.PostAccountRoleAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
-        }
-        [HttpDelete("DeleteAccountRole")]
-        public async Task<IActionResult> DeleteAccountRole([FromQuery] Cross_Account_RoleDto dto)
-        {
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
 
-            if (ModelState.IsValid)
-            {
-                var data = await _cross.DeleteAccountRoleAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _cross.PostCrossAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+        [HttpDelete("DeleteCross")]
+        [Authorize("Boss")]
+        public async Task<IActionResult> DeleteCross([FromQuery] Cross_Account_RoleDto dto)
+        {
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+
+            var data = await _cross.DeleteCrossAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
+        [HttpGet("GetOwnerCrossById")]
+        public async Task<IActionResult> GetOwnerByIddCross(int Id)
+        {
+            var data = await _cross.GetOwnerCrossByIdAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
 
+        [HttpPost("CreateOwnerCross")]
+        public async Task<IActionResult> CreateOwnerCross([FromQuery] Cross_Account_RoleDto dto)
+        {
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+
+            var data = await _cross.PostOwnerCrossAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+        [HttpDelete("DeleteOwnerCross")]
+        public async Task<IActionResult> DeleteOwnerCross([FromQuery] Cross_Account_RoleDto dto)
+        {
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+
+            var data = await _cross.DeleteOwnerCrossAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
 
 
 

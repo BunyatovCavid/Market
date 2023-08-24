@@ -650,6 +650,9 @@ namespace Market.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
                     b.Property<float?>("Add_Amount")
                         .HasColumnType("real");
 
@@ -693,10 +696,10 @@ namespace Market.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<float>("Amount")
+                    b.Property<float?>("Amount")
                         .HasColumnType("real");
 
-                    b.Property<int>("CheckVisualId")
+                    b.Property<int>("CheckId")
                         .HasColumnType("int");
 
                     b.Property<string>("Description")
@@ -710,7 +713,7 @@ namespace Market.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CheckVisualId");
+                    b.HasIndex("CheckId");
 
                     b.HasIndex("ItemId");
 
@@ -954,9 +957,9 @@ namespace Market.Migrations
 
             modelBuilder.Entity("Market.Domain.Entities.Visuals.SaleVisual", b =>
                 {
-                    b.HasOne("Market.Domain.Entities.Visuals.CheckVisual", "CheckVisual")
+                    b.HasOne("Market.Domain.Entities.Visuals.CheckVisual", "Check")
                         .WithMany("SaleVisuals")
-                        .HasForeignKey("CheckVisualId")
+                        .HasForeignKey("CheckId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -966,7 +969,7 @@ namespace Market.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("CheckVisual");
+                    b.Navigation("Check");
 
                     b.Navigation("Item");
                 });

@@ -1,14 +1,17 @@
 ﻿using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
+using Market.Independents;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Market.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize("Developer,Boss")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategory _category;
@@ -23,6 +26,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCategoryAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> GetCategoryAsync()
         {
             var data = await _category.GetCategoryAsync();
@@ -31,6 +35,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryByIdAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> GetCategoryGetCategoryByIdAsync([FromQuery] int Id)
         {
             var data = await _category.GetCategoryByIdAsync(Id);
@@ -39,6 +44,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> GetCategoryBySubCategoryAsync()
         {
             var data = await _category.GetCategoryBySubCategoryAsync();
@@ -47,7 +53,8 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryByIdAsync")]
-        public async Task<IActionResult> GetCategoryBySubCategoryByIdAsync([FromQuery]int Id)
+        [Authorize("Operator")]
+        public async Task<IActionResult> GetCategoryBySubCategoryByIdAsync([FromQuery] int Id)
         {
             var data = await _category.GetCategoryBySubCategoryByIdAsync(Id);
             var response = await _response.GetResponse(data);
@@ -61,7 +68,7 @@ namespace Market.Controllers
             var response = await _response.GetResponse(data);
             return response;
         }
-        
+
         [HttpGet("GetCategoryAllBySubCategoryAsync")]
         public async Task<IActionResult> GetCategoryAllBySubCategoryAsync()
         {
@@ -69,41 +76,38 @@ namespace Market.Controllers
             var response = await _response.GetResponse(data);
             return response;
         }
-        
+
         [HttpPost("CreateCategoryAsync")]
-        public async Task<IActionResult> CreateCategoryAsync([FromQuery]CategoryPostDto dto)
+        [Authorize("Operator")]
+        public async Task<IActionResult> CreateCategoryAsync([FromQuery] CategoryPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _category.CreateCategoryAsync(dto);
-                var response_ = await _response.GetResponse(data);
-                return response_;
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _category.CreateCategoryAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
-        
+
         [HttpPut("PutCategoryAsync")]
-        public async Task<IActionResult> PutCategoryAsync([FromQuery]CategoryPutDto dto)
+        [Authorize("Operator")]
+        public async Task<IActionResult> PutCategoryAsync([FromQuery] CategoryPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _category.PutCategoryAsync(dto);
-                var response_ = await _response.GetResponse(data);
-                return response_;
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _category.PutCategoryAsync(dto);
+            var response_ = await _response.GetResponse(data);
+            return response_;
         }
-        
+
         [HttpDelete("DeleteCategoryAsync")]
-        public async Task<IActionResult> DeleteCategoryAsync([FromQuery]int Id)
+        [Authorize("Operator")]
+        public async Task<IActionResult> DeleteCategoryAsync([FromQuery] int Id)
         {
             var data = await _category.DeleteCategoryAsync(Id);
             var response = await _response.GetResponse(data);
             return response;
         }
-        
+
         [HttpDelete("DeleteCategoryRealAsync")]
         public async Task<IActionResult> DeleteCategoryRealAsync([FromQuery] int Id)
         {
@@ -111,9 +115,9 @@ namespace Market.Controllers
             var response = await _response.GetResponse(data);
             return response;
         }
-      
+
         [HttpPut("ReturnCategoryAsync")]
-        public async Task<IActionResult> ReturnCategoryAsync([FromQuery]int Id)
+        public async Task<IActionResult> ReturnCategoryAsync([FromQuery] int Id)
         {
             var data = await _category.ReturnCategoryAsync(Id);
             var response = await _response.GetResponse(data);
@@ -124,6 +128,7 @@ namespace Market.Controllers
         //Sub_Category
 
         [HttpGet("GetSub_CategoryAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> GetSub_CategoryAsync()
         {
             var data = await _sub_category.GetSub_CategoryAsync();
@@ -132,6 +137,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByIdAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> GetSub_CategoryByIdAsync([FromQuery] int Id)
         {
             var data = await _sub_category.GetSub_CategoryByIdAsync(Id);
@@ -140,7 +146,8 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByCategoryIdAsync")]
-        public async Task<IActionResult> GetSub_CategoryByCategoryIdAsync([FromQuery]int Id)
+        [Authorize("Operator")]
+        public async Task<IActionResult> GetSub_CategoryByCategoryIdAsync([FromQuery] int Id)
         {
             var data = await _sub_category.GetSub_CategoryByCategoryIdAsync(Id);
             var response = await _response.GetResponse(data);
@@ -156,29 +163,25 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateSub_CategoryAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> CreateSub_CategoryAsync([FromQuery] Sub_CategoryPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _sub_category.CreateSub_CategoryAsync(dto);
-                var response_ = await _response.GetResponse(data);
-                return response_;
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _sub_category.CreateSub_CategoryAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpPut("PutSub_CategoryAsync")]
+        [Authorize("Operator")]
         public async Task<IActionResult> PutSub_CategoryAsync([FromQuery] Sub_CategoryPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _sub_category.PutSub_CategoryAsync(dto);
-                var response_ = await _response.GetResponse(data);
-                return response_;
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _sub_category.PutSub_CategoryAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpDelete("DeleteSub_CategoryAsync")]

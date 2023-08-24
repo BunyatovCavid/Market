@@ -1,7 +1,7 @@
 using FluentValidation.AspNetCore;
-using Market;
 using Market.Domain;
 using Market.Dtoes.Get_Dtoes;
+using Market.Independents;
 using Market.Interfaces;
 using Market.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;

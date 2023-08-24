@@ -1,75 +1,91 @@
 ﻿using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
+using Market.Independents;
 using Market.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace Market.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
+    [Authorize("Developer,Boss")]
     public class Discount_CardController : ControllerBase
     {
         private readonly IDiscount_Card _discount;
-        public Discount_CardController(IDiscount_Card Discount_Card)
+        private readonly Response _response;
+        public Discount_CardController(IDiscount_Card discount_Card,Response response)
         {
-            _discount = Discount_Card;
+            _discount = discount_Card;
+            _response = response;
         }
 
 
         [HttpGet("GetDiscount_Card")]
+        [Authorize("Admin")]
         public async Task<IActionResult> GetDiscount_CardAsync()
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _discount.GetDiscount_CardAsync();
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _discount.GetDiscount_CardAsync();
+            var response = await _response.GetResponse(data);
+            return response;
+        }
 
+
+        [HttpGet("GetAllDiscount_Card")]
+        public async Task<IActionResult> GetAllDiscount_CardAsync()
+        {
+            var data = await _discount.GetAllDiscount_CardAsync();
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpPost("CreateDiscount_Card")]
+        [Authorize("Admin")]
         public async Task<IActionResult> CreateDiscount_Card([FromQuery] Discount_CardPostDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _discount.CreateDiscount_CardAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            return BadRequest(dto);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _discount.CreateDiscount_CardAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpPut("PutDiscount_Card")]
+        [Authorize("Admin")]
         public async Task<IActionResult> PutDiscount_Card([FromQuery] Discount_CardPutDto dto)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _discount.PutDiscount_CardAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var check = await _response.CheckState(dto);
+            if (check != null) return check;
+            var data = await _discount.PutDiscount_CardAsync(dto);
+            var response = await _response.GetResponse(data);
+            return response;
         }
 
         [HttpDelete("DeleteDiscount_Card")]
-        public async Task<IActionResult> DeleteDiscount_Card([FromQuery] Discount_CardPutDto dto)
+        [Authorize("Admin")]
+        public async Task<IActionResult> DeleteDiscount_Card([FromQuery] int Id)
         {
-            if (ModelState.IsValid)
-            {
-                var data = await _discount.DeleteDiscount_CardAsync(dto);
-                if (data != null)
-                    return Ok(data);
-                return NotFound();
-            }
-            var response = ModelState.Values.FirstOrDefault(v => v.ValidationState == ModelValidationState.Invalid).Errors[0].ErrorMessage;
-            return BadRequest(response);
+            var data = await _discount.DeleteDiscount_CardAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
         }
+
+        [HttpDelete("DeleteDiscount_CardReal")]
+        public async Task<IActionResult> DeleteDiscount_CardReal([FromQuery] int Id)
+        {
+            var data = await _discount.DeleteDiscount_CardRealAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+        [HttpDelete("ReturnDiscount_Card")]
+        public async Task<IActionResult> ReturnDiscount_Card([FromQuery] int Id)
+        {
+            var data = await _discount.ReturnDiscount_CardAsync(Id);
+            var response = await _response.GetResponse(data);
+            return response;
+        }
+
 
 
     }

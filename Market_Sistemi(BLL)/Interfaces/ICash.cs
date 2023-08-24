@@ -1,0 +1,23 @@
+﻿using Market.Domain.Entities;
+using Market.Dtoes.Get_Dtoes;
+using Market.Dtoes.Post_Dtoes;
+using Market.Dtoes.PutDto;
+using Market_Sistemi_BLL_.Dtoes.GetDtoes;
+
+namespace Market.Interfaces
+{
+    public interface ICash
+    {
+        public Task<ICollection<CashGetDto>> GetCashAsync();
+
+        public Task<ICollection<CashGetDto>> CreateCashAsync(CashPostDto dto);
+
+        public Task<ICollection<CashGetDto>> PutCashAsync(CashPutDto dto);
+
+        public Task<ICollection<CashGetDto>> DeleteCashAsync(int Id);
+
+        public Task<ICollection<CashGetDto>> DeleteCashRealAsync(int Id);
+
+        public Task<ICollection<CashGetDto>> ReturnCashAsync(int Id);
+    }
+}
