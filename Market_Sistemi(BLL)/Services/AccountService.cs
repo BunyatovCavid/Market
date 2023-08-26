@@ -15,6 +15,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Xml.Linq;
 
 namespace Market.Services
 {
@@ -29,9 +30,8 @@ namespace Market.Services
             _db = db;
             _mapper = mapper;
         }
-        public async Task<ICollection<AccountGetDto>> GetAccountAsync()
+        private List<AccountGetDto> Get_Back(List<Account> data)
         {
-            var data = await _db.Accounts.Where(a => a.Description != "IsDelete").ToListAsync();
             List<AccountGetDto> response = new();
             AccountGetDto request = new();
             foreach (var item in data)
@@ -41,25 +41,43 @@ namespace Market.Services
             }
             return response;
         }
-        public async Task<ICollection<AccountAllGetDto>> GetAllAccountAsync()
+        public async Task<ICollection<AccountGetDto>> GetAccountAsync()
         {
-            var data = await _db.Accounts.ToListAsync();
+            var data = await _db.Accounts.Where(a => a.Description != "IsDelete").ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
+
+        private List<AccountAllGetDto> Get_BackAll(List<Account> data)
+        {
             List<AccountAllGetDto> response = new();
             AccountAllGetDto request = new();
             foreach (var item in data)
             {
-               request = _mapper.Map<AccountAllGetDto>(item);
+                request = _mapper.Map<AccountAllGetDto>(item);
                 response.Add(request);
             }
             return response;
         }
+        public async Task<ICollection<AccountAllGetDto>> GetAllAccountAsync()
+        {
+            var data = await _db.Accounts.ToListAsync();
+            var response = Get_BackAll(data);
+            return response;
+          
+        }
         public async Task<AccountGetDto> GetAccountByNameAsync(string name)
         {
-            var data = await _db.Accounts.FirstOrDefaultAsync(r => r.Name == name);
+            var data = await _db.Accounts.FirstOrDefaultAsync(a => a.Name == name && a.Description != "IsDelete");
             var response = _mapper.Map<AccountGetDto>(data);
             return response;
         }
 
+        private async Task<Account> GetAccountById(int Id)
+        {
+            var data = await _db.Accounts.FirstOrDefaultAsync(a => a.Id==Id && a.Description!="IsDelete");
+            return data;
+        }
         public async Task<ICollection<AccountGetDto>> CreateAccountAsync(LoginDto dto)
         {
             var check = await GetAccountByNameAsync(dto.Name);
@@ -75,7 +93,7 @@ namespace Market.Services
         }
         public async Task<ICollection<AccountGetDto>> PutAccountAsync(AccountPutDto dto)
         {
-            var data = await GetAccountByIDForDelete(dto.Id);
+            var data = await GetAccountById(dto.Id);
             if (data != null)
             {
                 _mapper.Map(dto, data);

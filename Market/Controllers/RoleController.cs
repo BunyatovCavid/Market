@@ -11,7 +11,7 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer")]
+    [Authorize(Roles = "Developer")]
     public class RoleController : ControllerBase
     {
         private readonly IRole _role;
@@ -31,15 +31,14 @@ namespace Market.Controllers
             return response;
         }
 
-        [HttpGet("GetRoleByFilterAsync")]
-        public async Task<IActionResult> GetRoleByFilterAsync([FromQuery] RoleDto dto)
+        [HttpGet("GetRoleByIdAsync")]
+        public async Task<IActionResult> GetRoleByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
             if (check != null) return check;
-            var data = await _role.GetRoleByIdAsync(dto);
+            var data = await _role.GetRoleByIdAsync(dto.Id);
             var response = _response.GetResponse(data);
             return response;
-
         }
 
         [HttpPost("CreateRoleAsync")]

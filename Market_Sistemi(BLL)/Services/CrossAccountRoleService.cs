@@ -23,23 +23,45 @@ namespace Market.Services
             _Role = role;
         }
 
-        public async Task<ICollection<CrossGetDto>> GetCrossAsync()
+
+        private ICollection<CrossGetDto> Get_Back(List<Account> data)
         {
-            var data = await _db.Accounts.Include(c => c.Cross_Account_Role).ToListAsync();
             List<CrossGetDto> response = new();
             CrossGetDto request = new();
             foreach (var item in data)
             {
                 request = _mapper.Map<CrossGetDto>(item);
+                foreach (var sub_item in item.Cross_Account_Role)
+                {
+                    var sub_Request = _mapper.Map<Cross_Account_RoleBackGetDto>(sub_item);
+                    request.Cross_Account_RoleBackGetDtoes.Add(sub_Request);
+                }
                 response.Add(request);
             }
             return response;
         }
+        public async Task<ICollection<CrossGetDto>> GetCrossAsync()
+        {
+            var data = await _db.Accounts.Include(c => c.Cross_Account_Role).ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
 
+
+        private CrossGetDto Get_BackById(Account data)
+        {
+            var response = _mapper.Map<CrossGetDto>(data);
+            foreach (var sub_item in data.Cross_Account_Role)
+            {
+                var sub_Request = _mapper.Map<Cross_Account_RoleBackGetDto>(sub_item);
+                response.Cross_Account_RoleBackGetDtoes.Add(sub_Request);
+            }
+            return response;
+        }
         public async Task<CrossGetDto> GetCrossByIdAsync(int Id)
         {
             var data = await _db.Accounts.Include(c => c.Cross_Account_Role).FirstOrDefaultAsync(a => a.Id == Id && a.Id > 1);
-            var response = _mapper.Map<CrossGetDto>(data);
+            var response = Get_BackById(data);
             return response;
         }
 
@@ -67,10 +89,15 @@ namespace Market.Services
             var response = await GetCrossAsync();
             return response;
         }
+        private async Task<Account> GetAccountForOwnerPost(int Id)
+        {
+            var data = await _db.Accounts.Include(c => c.Cross_Account_Role).FirstOrDefaultAsync(a => a.Id == Id);
+            return data;
+        }
 
         public async Task<ICollection<CrossGetDto>> PostOwnerCrossAsync(Cross_Account_RoleDto dto)
         {
-            var data = await GetAccountForPost(dto.AccountId);
+            var data = await GetAccountForOwnerPost(dto.AccountId);
             if (data != null)
             {
                 data.Cross_Account_Role.Add(new Cross_Account_Role() { AccountId = dto.AccountId, RoleId = dto.RoleId });
@@ -109,10 +136,10 @@ namespace Market.Services
 
         public async Task<CrossGetDto> DeleteOwnerCrossAsync(Cross_Account_RoleDto dto)
         {
-            var data = await GetAccountForPost(dto.AccountId);
+            var data = await GetAccountForOwnerPost(dto.AccountId);
             await Back_DeleteCrossAsync(data, dto.RoleId);
-            var response = await GetCrossByIdAsync(dto.AccountId);
-
+            var request = await GetAccountForOwnerPost(dto.AccountId);
+            var response = _mapper.Map<CrossGetDto>(request);
             return response;
         }
 

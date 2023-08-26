@@ -9,6 +9,7 @@ namespace Market.IEntityTypeConfigurations
         public void Configure(EntityTypeBuilder<Role> builder)
         {
             builder.Property(a=>a.Name).HasMaxLength(10).IsRequired();
+            builder.HasData(new Role() { Id =1, Name = "Developer"});
         }
     }
 }

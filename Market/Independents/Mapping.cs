@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Market.Domain.Entities;
+using Market.Domain.Entities.Cross;
 using Market.Domain.Entities.Visuals;
 using Market.Dtoes;
 using Market.Dtoes.Get_Dtoes;
@@ -21,8 +22,10 @@ namespace Market.Independents
             CreateMap<Account, AccountGetDto>();
             CreateMap<AccountPutDto, AccountGetDto>();
             CreateMap<AccountPutDto, Account>();
+            CreateMap<Account, AccountAllGetDto>();
 
             CreateMap<Account, CrossGetDto>();
+            CreateMap<Cross_Account_Role, Cross_Account_RoleBackGetDto>();
 
 
 
@@ -32,8 +35,7 @@ namespace Market.Independents
             CreateMap<ItemPutDto, ItemGetDto>();
 
             CreateMap<Role, RoleDto>();
-            CreateMap<RoleDto?, Role>();
-            CreateMap<RoleDto?, RoleDto>();
+            CreateMap<RoleDto, Role>();
             CreateMap<RolePostDto, Role>();
             CreateMap<List<Role>?, ICollection<RoleDto>?>();
 

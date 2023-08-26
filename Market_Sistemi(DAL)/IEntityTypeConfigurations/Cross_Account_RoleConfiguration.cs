@@ -12,6 +12,8 @@ namespace Market.IEntityTypeConfigurations
             builder.Property(a => a.AccountId).IsRequired();
             builder.Property(a => a.RoleId).IsRequired();
 
+            builder.HasData(new Cross_Account_Role() { AccountId = 1, RoleId = 1 });
+
             builder.HasKey(k => new { k.AccountId, k.RoleId });
 
             builder.HasOne(c => c.Account)

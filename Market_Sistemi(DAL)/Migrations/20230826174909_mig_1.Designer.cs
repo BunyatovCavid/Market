@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace Market.Migrations
+namespace Market_Sistemi_DAL_.Migrations
 {
     [DbContext(typeof(MarketDbContext))]
-    [Migration("20230823223558_mig_7")]
-    partial class mig_7
+    [Migration("20230826174909_mig_1")]
+    partial class mig_1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -48,6 +48,14 @@ namespace Market.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Accounts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Bunyatov Cavid",
+                            Password = 0
+                        });
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Bonus_Card", b =>
@@ -140,6 +148,7 @@ namespace Market.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
+                        .IsRequired()
                         .HasMaxLength(12)
                         .HasColumnType("nvarchar(12)");
 
@@ -275,48 +284,6 @@ namespace Market.Migrations
                     b.ToTable("Companies");
                 });
 
-            modelBuilder.Entity("Market.Domain.Entities.Company_Report", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("AccountId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(12)
-                        .HasColumnType("nvarchar(12)");
-
-                    b.Property<float?>("Final_Debt")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("First_Debt")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Our_Debt")
-                        .HasColumnType("real");
-
-                    b.Property<float?>("Us_Debt")
-                        .HasColumnType("real");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AccountId");
-
-                    b.HasIndex("CompanyId");
-
-                    b.ToTable("Company_Reports");
-                });
-
             modelBuilder.Entity("Market.Domain.Entities.Cross.Cross_Account_Role", b =>
                 {
                     b.Property<int>("AccountId")
@@ -330,6 +297,13 @@ namespace Market.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("Cross_Account_Role");
+
+                    b.HasData(
+                        new
+                        {
+                            AccountId = 1,
+                            RoleId = 1
+                        });
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Discount_Card", b =>
@@ -540,9 +514,10 @@ namespace Market.Migrations
                     b.Property<int>("Paper_Number")
                         .HasColumnType("int");
 
-                    b.Property<int>("Status")
+                    b.Property<string>("Status")
+                        .IsRequired()
                         .HasMaxLength(10)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(10)");
 
                     b.HasKey("Id");
 
@@ -569,6 +544,13 @@ namespace Market.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Developer"
+                        });
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Sale", b =>
@@ -717,7 +699,8 @@ namespace Market.Migrations
 
                     b.HasIndex("CheckId");
 
-                    b.HasIndex("ItemId");
+                    b.HasIndex("ItemId")
+                        .IsUnique();
 
                     b.ToTable("SaleVisuals");
                 });
@@ -803,25 +786,6 @@ namespace Market.Migrations
                         .IsRequired();
 
                     b.Navigation("Account");
-                });
-
-            modelBuilder.Entity("Market.Domain.Entities.Company_Report", b =>
-                {
-                    b.HasOne("Market.Domain.Entities.Account", "Account")
-                        .WithMany("Company_Reports")
-                        .HasForeignKey("AccountId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Market.Domain.Entities.Company", "Company")
-                        .WithMany("Company_Report")
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.Navigation("Account");
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Cross.Cross_Account_Role", b =>
@@ -966,8 +930,8 @@ namespace Market.Migrations
                         .IsRequired();
 
                     b.HasOne("Market.Domain.Entities.Item", "Item")
-                        .WithMany()
-                        .HasForeignKey("ItemId")
+                        .WithOne("SaleVisual")
+                        .HasForeignKey("Market.Domain.Entities.Visuals.SaleVisual", "ItemId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -987,8 +951,6 @@ namespace Market.Migrations
                     b.Navigation("Checks");
 
                     b.Navigation("Companies");
-
-                    b.Navigation("Company_Reports");
 
                     b.Navigation("Cross_Account_Role");
 
@@ -1028,8 +990,6 @@ namespace Market.Migrations
 
             modelBuilder.Entity("Market.Domain.Entities.Company", b =>
                 {
-                    b.Navigation("Company_Report");
-
                     b.Navigation("Items");
                 });
 
@@ -1045,6 +1005,9 @@ namespace Market.Migrations
                         .IsRequired();
 
                     b.Navigation("Sale")
+                        .IsRequired();
+
+                    b.Navigation("SaleVisual")
                         .IsRequired();
                 });
 

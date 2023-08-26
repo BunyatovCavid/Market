@@ -11,7 +11,7 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer,Boss")]
+    [Authorize(Roles = "Developer,Boss")]
     public class Discount_CardController : ControllerBase
     {
         private readonly IDiscount_Card _discount;
@@ -24,7 +24,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetDiscount_Card")]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetDiscount_CardAsync()
         {
             var data = await _discount.GetDiscount_CardAsync();
@@ -42,7 +42,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateDiscount_Card")]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateDiscount_Card([FromQuery] Discount_CardPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -53,7 +53,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutDiscount_Card")]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> PutDiscount_Card([FromQuery] Discount_CardPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -64,7 +64,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteDiscount_Card")]
-        [Authorize("Admin")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteDiscount_Card([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

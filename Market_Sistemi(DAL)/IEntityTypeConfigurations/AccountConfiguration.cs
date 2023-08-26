@@ -1,4 +1,5 @@
 ﻿using Market.Domain.Entities;
+using Market.Domain.Entities.Cross;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System.Reflection.Emit;
@@ -13,7 +14,7 @@ namespace Market.IEntityTypeConfigurations
             builder.Property(a => a.Password).HasMaxLength(15).IsRequired();
             builder.Property(a => a.Description).HasMaxLength(50);
 
-
+            builder.HasData(new Account (){ Id = 1, Name = "Bunyatov Cavid", Password =1 });
 
             builder.HasMany(a => a.Bonus_Cards)
                 .WithOne(b => b.Account)

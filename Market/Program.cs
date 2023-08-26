@@ -11,6 +11,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,8 +23,7 @@ builder.Services.AddControllers().AddFluentValidation(x => x.RegisterValidatorsF
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddDbContext<MarketDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("connect")));
-
+builder.Services.AddDbContext<MarketDbContext>();
 
 builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy =>
 {
@@ -34,6 +34,8 @@ builder.Services.AddCors(options => options.AddPolicy("AllAllowed", policy =>
 
 builder.Services.AddLogging(x => x.AddFile("Logs/mylog-{Date}.txt", LogLevel.Error));
 builder.Services.AddAutoMapper(typeof(Mapping));
+
+
 
 
 builder.Services.AddScoped<IAccount, AccountService>();

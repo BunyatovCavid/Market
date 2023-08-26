@@ -12,7 +12,7 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer,Boss")]
+    [Authorize(Roles = "Developer,Boss")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategory _category;
@@ -27,7 +27,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetCategoryAsync()
         {
             var data = await _category.GetCategoryAsync();
@@ -36,7 +36,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryByIdAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetCategoryGetCategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -47,7 +47,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetCategoryBySubCategoryAsync()
         {
             var data = await _category.GetCategoryBySubCategoryAsync();
@@ -56,7 +56,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryByIdAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetCategoryBySubCategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -83,7 +83,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> CreateCategoryAsync([FromQuery] CategoryPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -94,7 +94,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutCategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PutCategoryAsync([FromQuery] CategoryPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -105,7 +105,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> DeleteCategoryAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -139,7 +139,7 @@ namespace Market.Controllers
         //Sub_Category
 
         [HttpGet("GetSub_CategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetSub_CategoryAsync()
         {
             var data = await _sub_category.GetSub_CategoryAsync();
@@ -148,7 +148,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByIdAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetSub_CategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -159,7 +159,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByCategoryIdAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetSub_CategoryByCategoryIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -178,7 +178,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateSub_CategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> CreateSub_CategoryAsync([FromQuery] Sub_CategoryPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -189,7 +189,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutSub_CategoryAsync")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PutSub_CategoryAsync([FromQuery] Sub_CategoryPutDto dto)
         {
             var check = _response.CheckState(dto);

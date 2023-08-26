@@ -13,12 +13,14 @@ using Newtonsoft.Json;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 using Market.Independents;
 using Market_Sistemi_BLL_.Dtoes;
+using Market_Sistemi_BLL_.Dtoes.GetDtoes;
+using Microsoft.Extensions.Options;
+using System.Text.Json.Serialization;
 
 namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer")]
     public class AccountController : ControllerBase
     {
         private readonly IAccount _account;
@@ -35,7 +37,6 @@ namespace Market.Controllers
 
 
         [HttpGet("Login")]
-        [AllowAnonymous]
         public IActionResult Login([FromQuery] LoginDto dto)
         {
             var check = _response.CheckState(dto);
@@ -50,7 +51,7 @@ namespace Market.Controllers
 
 
         [HttpPost("Register")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> Register([FromQuery] LoginDto dto)
         {
             var check = _response.CheckState(dto);
@@ -62,7 +63,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetAccountByName")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> GetAccountByName([FromQuery] AllOneNamePostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -72,7 +73,7 @@ namespace Market.Controllers
             return response;
         }
         [HttpGet("GetAccount")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> GetAccount()
         {
 
@@ -81,7 +82,7 @@ namespace Market.Controllers
             return response;
         }
         [HttpGet("GetAllAccount")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> GetAllAccount()
         {
             var data = await _account.GetAllAccountAsync();
@@ -90,11 +91,11 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutAccount")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> PutAccount([FromQuery] AccountPutDto dto)
         {
             var check = _response.CheckState(dto);
-            if (check != null) return null;
+            if (check != null) return check;
 
             var data = await _account.PutAccountAsync(dto);
 
@@ -103,7 +104,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteAccount")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> DeleteAccount([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -114,7 +115,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteAccountReal")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> DeleteAccountReal([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -125,7 +126,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnAccount")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> ReturnAccount([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -142,17 +143,21 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCross")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> GetCross()
         {
             var data = await _cross.GetCrossAsync();
-            var response = _response.GetResponse(data);
+            var request = JsonConvert.SerializeObject(data, Formatting.Indented, new JsonSerializerSettings
+            {
+                ReferenceLoopHandling = ReferenceLoopHandling.Ignore
+            });
+            var response = _response.GetResponse(request);
             return response;
         }
 
         [HttpGet("GetCrossBydto")]
-        [Authorize("Boss")]
-        public async Task<IActionResult> GetCrossById(AllOneNumberPostDto dto)
+        [Authorize(Roles =("Boss,Developer"))]
+        public async Task<IActionResult> GetCrossById([FromQuery]AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
             if (check != null) return check;
@@ -162,7 +167,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCross")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Developer"))]
         public async Task<IActionResult> CreateCross([FromQuery] Cross_Account_RoleDto dto)
         {
             var check = _response.CheckState(dto);
@@ -173,7 +178,7 @@ namespace Market.Controllers
             return response;
         }
         [HttpDelete("DeleteCross")]
-        [Authorize("Boss")]
+        [Authorize(Roles =("Boss,Developer"))]
         public async Task<IActionResult> DeleteCross([FromQuery] Cross_Account_RoleDto dto)
         {
             var check = _response.CheckState(dto);
@@ -184,8 +189,14 @@ namespace Market.Controllers
             return response;
         }
 
+
+
+
+        //Owner
+
         [HttpGet("GetOwnerCrossById")]
-        public async Task<IActionResult> GetOwnerByIddCross(AllOneNumberPostDto dto)
+        [Authorize(Roles =("Developer"))]
+        public async Task<IActionResult> GetOwnerByIddCross([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
             if (check != null) return check;
@@ -195,6 +206,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateOwnerCross")]
+        [Authorize(Roles =("Developer"))]
         public async Task<IActionResult> CreateOwnerCross([FromQuery] Cross_Account_RoleDto dto)
         {
             var check = _response.CheckState(dto);
@@ -205,6 +217,7 @@ namespace Market.Controllers
             return response;
         }
         [HttpDelete("DeleteOwnerCross")]
+        [Authorize(Roles =("Developer"))]
         public async Task<IActionResult> DeleteOwnerCross([FromQuery] Cross_Account_RoleDto dto)
         {
             var check = _response.CheckState(dto);

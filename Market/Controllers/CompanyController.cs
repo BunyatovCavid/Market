@@ -13,7 +13,7 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer,Boss")]
+    [Authorize(Roles = "Developer,Boss")]
     public class CompanyController : ControllerBase
     {
 
@@ -27,7 +27,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCompany")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> GetCompanyAsync()
         {
             var data = await _company.GetCompanyAsync();
@@ -44,7 +44,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCompany")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> CreateCompanyAsync([FromQuery] CompanyPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -55,7 +55,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutCompany")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> PutCompanyAsync([FromQuery] CompanyPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -66,7 +66,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCompany")]
-        [Authorize("Operator")]
+        [Authorize(Roles = "Operator")]
         public async Task<IActionResult> DeleteCompanyAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

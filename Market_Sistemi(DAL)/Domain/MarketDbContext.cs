@@ -9,8 +9,8 @@ namespace Market.Domain
     public class MarketDbContext : DbContext
     {
         public DbSet<Account> Accounts { get; set; }
-        public DbSet<Cross_Account_Role> Cross_Account_Role { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Cross_Account_Role> Cross_Account_Role { get; set; }
         public DbSet<Bonus_Card> Bonus_Cards { get; set; }
         public DbSet<Bonus_Card_Report> Bonus_Card_Reports { get; set; }
         public DbSet<Discount_Card> Discount_Cards { get; set; }
@@ -29,13 +29,12 @@ namespace Market.Domain
         {
             
         }
-
-        public MarketDbContext(DbContextOptions<MarketDbContext> options) :base(options)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            optionsBuilder.UseSqlServer("Server=WIN-PFGV5N8DK24;Database=Market;Trusted_Connection=True;Encrypt=false;TrustServerCertificate=true;");   
         }
-   
-        
+
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

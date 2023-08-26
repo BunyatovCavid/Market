@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Market.Migrations
+namespace Market_Sistemi_DAL_.Migrations
 {
     public partial class mig_1 : Migration
     {
@@ -31,12 +31,35 @@ namespace Market.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Number = table.Column<int>(type: "int", maxLength: 2, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true)
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Cashes", x => x.Id);
                     table.UniqueConstraint("AK_Cashes_Number", x => x.Number);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CheckVisuals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    CheckNumber = table.Column<int>(type: "int", nullable: false),
+                    Bonus_CardId = table.Column<int>(type: "int", nullable: true),
+                    Discount_CardId = table.Column<int>(type: "int", nullable: true),
+                    Amount = table.Column<float>(type: "real", nullable: false),
+                    Add_Amount = table.Column<float>(type: "real", nullable: true),
+                    Out_Amount = table.Column<float>(type: "real", nullable: true),
+                    Bonus_Amount = table.Column<int>(type: "int", nullable: true),
+                    Final_Amount = table.Column<float>(type: "real", nullable: true),
+                    CashId = table.Column<int>(type: "int", nullable: false),
+                    AccountId = table.Column<int>(type: "int", nullable: false),
+                    Date = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CheckVisuals", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -62,6 +85,7 @@ namespace Market.Migrations
                     Name = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Bonus = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
@@ -156,14 +180,12 @@ namespace Market.Migrations
                     Paper_Number = table.Column<int>(type: "int", nullable: false),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
-                    Status = table.Column<int>(type: "int", maxLength: 10, nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Concession = table.Column<float>(type: "real", nullable: true),
                     Discount = table.Column<float>(type: "real", nullable: true),
                     Amount = table.Column<float>(type: "real", nullable: false),
                     Final_Amount = table.Column<float>(type: "real", nullable: false),
-                    Inclusive = table.Column<int>(type: "int", nullable: false),
-                    Correction = table.Column<int>(type: "int", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -209,7 +231,7 @@ namespace Market.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Bonus_CardId = table.Column<int>(type: "int", nullable: false),
-                    Amount = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<float>(type: "real", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
@@ -260,42 +282,12 @@ namespace Market.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Company_Reports",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CompanyId = table.Column<int>(type: "int", nullable: false),
-                    First_Debt = table.Column<float>(type: "real", nullable: true),
-                    Our_Debt = table.Column<float>(type: "real", nullable: true),
-                    Us_Debt = table.Column<float>(type: "real", nullable: true),
-                    Final_Debt = table.Column<float>(type: "real", nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
-                    Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Company_Reports", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Company_Reports_Accounts_AccountId",
-                        column: x => x.AccountId,
-                        principalTable: "Accounts",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Company_Reports_Companies_CompanyId",
-                        column: x => x.CompanyId,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Checks",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    CheckNumber = table.Column<int>(type: "int", nullable: false),
                     Bonus_CardId = table.Column<int>(type: "int", nullable: true),
                     Discount_CardId = table.Column<int>(type: "int", nullable: true),
                     Amount = table.Column<float>(type: "real", nullable: false),
@@ -346,6 +338,7 @@ namespace Market.Migrations
                     Sub_CategoryId = table.Column<int>(type: "int", nullable: false),
                     Number = table.Column<int>(type: "int", maxLength: 10, nullable: false),
                     CompanyId = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<float>(type: "real", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     AccountId = table.Column<int>(type: "int", nullable: false)
@@ -395,6 +388,7 @@ namespace Market.Migrations
                     Sale_Amount = table.Column<float>(type: "real", nullable: false),
                     Final = table.Column<float>(type: "real", nullable: false),
                     Print_Number = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(12)", maxLength: 12, nullable: false),
                     PaperId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -409,7 +403,8 @@ namespace Market.Migrations
                         name: "FK_Includeds_Papers_PaperId",
                         column: x => x.PaperId,
                         principalTable: "Papers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -439,6 +434,50 @@ namespace Market.Migrations
                         principalTable: "Items",
                         principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateTable(
+                name: "SaleVisuals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ItemId = table.Column<int>(type: "int", nullable: false),
+                    Number = table.Column<int>(type: "int", nullable: false),
+                    Amount = table.Column<float>(type: "real", nullable: true),
+                    CheckId = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SaleVisuals", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SaleVisuals_CheckVisuals_CheckId",
+                        column: x => x.CheckId,
+                        principalTable: "CheckVisuals",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_SaleVisuals_Items_ItemId",
+                        column: x => x.ItemId,
+                        principalTable: "Items",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.InsertData(
+                table: "Accounts",
+                columns: new[] { "Id", "Description", "Name", "Password" },
+                values: new object[] { 1, null, "Bunyatov Cavid", 1 });
+
+            migrationBuilder.InsertData(
+                table: "Roles",
+                columns: new[] { "Id", "Name" },
+                values: new object[] { 1, "Developer" });
+
+            migrationBuilder.InsertData(
+                table: "Cross_Account_Role",
+                columns: new[] { "AccountId", "RoleId" },
+                values: new object[] { 1, 1 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Bonus_Card_Reports_AccountId",
@@ -494,16 +533,6 @@ namespace Market.Migrations
                 name: "IX_Companies_AccountId",
                 table: "Companies",
                 column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Company_Reports_AccountId",
-                table: "Company_Reports",
-                column: "AccountId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Company_Reports_CompanyId",
-                table: "Company_Reports",
-                column: "CompanyId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cross_Account_Role_RoleId",
@@ -575,6 +604,17 @@ namespace Market.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_SaleVisuals_CheckId",
+                table: "SaleVisuals",
+                column: "CheckId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SaleVisuals_ItemId",
+                table: "SaleVisuals",
+                column: "ItemId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Sub_Categories_AccountId",
                 table: "Sub_Categories",
                 column: "AccountId");
@@ -591,9 +631,6 @@ namespace Market.Migrations
                 name: "Bonus_Card_Reports");
 
             migrationBuilder.DropTable(
-                name: "Company_Reports");
-
-            migrationBuilder.DropTable(
                 name: "Cross_Account_Role");
 
             migrationBuilder.DropTable(
@@ -603,6 +640,9 @@ namespace Market.Migrations
                 name: "Sales");
 
             migrationBuilder.DropTable(
+                name: "SaleVisuals");
+
+            migrationBuilder.DropTable(
                 name: "Roles");
 
             migrationBuilder.DropTable(
@@ -610,6 +650,9 @@ namespace Market.Migrations
 
             migrationBuilder.DropTable(
                 name: "Checks");
+
+            migrationBuilder.DropTable(
+                name: "CheckVisuals");
 
             migrationBuilder.DropTable(
                 name: "Items");

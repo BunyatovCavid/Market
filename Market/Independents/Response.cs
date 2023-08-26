@@ -1,6 +1,8 @@
 ﻿using Market.Dtoes.Get_Dtoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System.Text.Json.Serialization;
+using System.Text.Json;
 
 namespace Market.Independents
 {
@@ -12,6 +14,7 @@ namespace Market.Independents
                 return Ok(data);
             return NotFound();
         }
+
         public IActionResult CheckState<TEntity>(TEntity dto) where TEntity : class
         {
             if (!ModelState.IsValid)
@@ -22,5 +25,6 @@ namespace Market.Independents
             return null;
 
         }
+
     }
 }

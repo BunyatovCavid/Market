@@ -13,7 +13,7 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize("Developer,Boss")]
+    [Authorize(Roles = "Developer,Boss")]
     public class CashController : ControllerBase
     {
         private readonly ICash _cash;
