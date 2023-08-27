@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Market.Interfaces;
 using Market.Dtoes.GetDtoes;
 using Market.Dtoes.PutDto;
-using Market.Domain.Entities.Visuals;
 using Market.Dtoes.PostDtoes;
 using AutoMapper.Execution;
 using System.Collections.Generic;
@@ -25,10 +24,8 @@ namespace Market.Services
         }
 
 
-
-        public async Task<ICollection<SaleAllGetDto>> GetAllSalesAsync(int Number)
+        private ICollection<SaleAllGetDto> Get_BackALl(List<Sale> data)
         {
-            var data = await _db.Sales.Where(s => s.CheckId == Number).ToListAsync();
             List<SaleAllGetDto> response = new();
             SaleAllGetDto request = new();
             foreach (var item in data)
@@ -36,6 +33,14 @@ namespace Market.Services
                 request = _mapper.Map<SaleAllGetDto>(item);
                 response.Add(request);
             }
+            return response;
+        }
+
+
+        public async Task<ICollection<SaleAllGetDto>> GetAllSalesAsync(int Number)
+        {
+            var data = await _db.Sales.Where(s => s.CheckId == Number).ToListAsync();
+            var response = Get_BackALl(data);
             return response;
 
         }
@@ -45,9 +50,11 @@ namespace Market.Services
             var response = _mapper.Map<SaleGetDto>(data);
             return response;
         }
-        public async Task<ICollection<SaleGetDto>> GetSalesAsync(int Number)
+
+
+
+        private ICollection<SaleGetDto> Get_Back(List<Sale> data)
         {
-            var data = await _db.Sales.Where(s => s.CheckId == Number && s.Description != "IsDelete").ToListAsync();
             List<SaleGetDto> response = new();
             SaleGetDto request = new();
             foreach (var item in data)
@@ -57,12 +64,18 @@ namespace Market.Services
             }
             return response;
         }
+        public async Task<ICollection<SaleGetDto>> GetSalesAsync(int Number)
+        {
+            var data = await _db.Sales.Where(s => s.CheckId == Number && s.Description != "IsDelete").ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
         private async Task<Sale> GetSaleByIdForPut(int Id)
         {
             var data = await _db.Sales.FirstOrDefaultAsync(s => s.Description != "IsDelete" && s.Id == Id);
             return data;
         }
-        public async Task<ICollection<SaleGetDto>> PutSaleOwnerAsync(SalePutDto dto)
+        public async Task<ICollection<SaleGetDto>> PutSaleAsync(SalePutDto dto)
         {
             var data = await GetSaleByIdForPut(dto.Id);
             if (data != null && dto.Number > 0)
@@ -73,11 +86,7 @@ namespace Market.Services
             var response = await GetSalesAsync(dto.CheckNumber);
             return response;
         }
-        private async Task<Sale> GetSaleForDelete(int Id)
-        {
-            var data = await _db.Sales.FirstOrDefaultAsync(s => s.Id == Id);
-            return data;
-        }
+
         private async Task<Sale> GetSaleByIdForDelete(int Id)
         {
             var data = await _db.Sales.FirstOrDefaultAsync(s => s.Id == Id);
@@ -85,7 +94,7 @@ namespace Market.Services
         }
         public async Task<ICollection<SaleGetDto>> DeleteSaleAsync(int Id)
         {
-            var data = await GetSaleForDelete(Id);
+            var data = await GetSaleByIdForPut(Id);
             ICollection<SaleGetDto> response = null;
             if (data != null)
             {
@@ -121,27 +130,9 @@ namespace Market.Services
         }
 
 
-
-        public async Task<ICollection<SaleGetDto>> GetSaleVisualAsync(int Number)
+        public async Task<ICollection<SaleGetDto>> AddSaleAsync(SalePostDto dto)
         {
-            var data = await _db.SaleVisuals.Where(s => s.CheckId == Number && s.Description != "IsDelete").ToListAsync();
-            List<SaleGetDto> response = new();
-            SaleGetDto request = new();
-            foreach (var item in data)
-            {
-                request = _mapper.Map<SaleGetDto>(item);
-                response.Add(request);
-            }
-            return response;
-        }
-        private async Task<SaleVisual> GetSaleVisualByIdForPut(int Id)
-        {
-            var data = await _db.SaleVisuals.FirstOrDefaultAsync(s => s.Description != "IsDelete" && s.Id == Id);
-            return data;
-        }
-        public async Task<ICollection<SaleGetDto>> AddSaleVisualAsync(SalePostDto dto)
-        {
-            var check = await _db.SaleVisuals.FirstOrDefaultAsync(s => s.CheckId == dto.CheckId && s.ItemId == dto.ItemId);
+            var check = await _db.Sales.FirstOrDefaultAsync(s => s.CheckId == dto.CheckId && s.ItemId == dto.ItemId);
             var item = await _db.Items.FirstOrDefaultAsync(i => i.Id == dto.ItemId);
             if (check != null && item!=null)
             {
@@ -152,9 +143,9 @@ namespace Market.Services
             {
                 if (item != null)
                 {
-                    var data = _mapper.Map<SaleVisual>(dto);
+                    var data = _mapper.Map<Sale>(dto);
                     data.Amount = data.Number * item.Amount;
-                    await _db.SaleVisuals.AddAsync(data);
+                    await _db.Sales.AddAsync(data);
                 }
             }
             await _db.SaveChangesAsync();
@@ -162,40 +153,8 @@ namespace Market.Services
             var response = await GetSalesAsync(dto.CheckId);
             return response;
         }
-        public async Task<ICollection<SaleGetDto>> PutSaleVisualAsync(SalePutDto dto)
-        {
-            var data = await GetSaleVisualByIdForPut(dto.Id);
-            if (data != null && dto.Number > data.Number)
-            {
-                data.Number = dto.Number;
-                await _db.SaveChangesAsync();
-            }
-            var response = await GetSaleVisualAsync(dto.CheckNumber);
-            return response;
-        }
-        public async Task<ICollection<SaleGetDto>> PutSaleVisualOwnerAsync(SalePutDto dto)
-        {
-            var data = await GetSaleVisualByIdForPut(dto.Id);
-            if (data != null && dto.Number > 0)
-            {
-                data.Number = dto.Number;
-                await _db.SaveChangesAsync();
-            }
-            var response = await GetSaleVisualAsync(dto.CheckNumber);
-            return response;
-        }
-        public async Task<ICollection<SaleGetDto>> DeleteSaleVisualAsync(int Id)
-        {
-            var data = await GetSaleVisualByIdForPut(Id);
-            ICollection<SaleGetDto> response = null;
-            if (data != null)
-            {
-                _db.SaleVisuals.Remove(data);
-                await _db.SaveChangesAsync();
-                response = await GetSaleVisualAsync(data.CheckId);
-            }
-            return response;
-        }
+
+
 
     }
 }

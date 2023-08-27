@@ -12,10 +12,11 @@ namespace Market.Interfaces
 
         public Task<ICollection<CheckGetDto>> GetChecksAsync();
         public Task<ICollection<CheckAllGetDto>> GetAllChecksAsync();
-        public Task<CheckGetDto> GetCheckbyNumberAsync(int Id);
+        public Task<CheckGetDto> GetCheckbyIdAsync(int Id);
 
-        public Task<CheckGetDto> CreateCheckAsync(CheckPostDto dto);
+        public Task<ICollection<CheckGetDto>> CreateCheckAsync(CheckPostDto dto);
         public Task<CheckGetDto> UseBonus_CardAsync(UseCardPostDto dto);
+        public Task<CheckGetDto> UseBonusAsync(UseCardPostDto dto);
         public Task<CheckGetDto> UseDiscount_CardAsync(UseCardPostDto dto);
         public Task<CheckGetDto> AddAmountInCheckAsync(AddAmountPostDto dto);
         public Task<CheckGetDto> SaveCheckByIncluded(int CheckId);

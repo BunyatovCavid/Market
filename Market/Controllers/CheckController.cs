@@ -18,7 +18,6 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Developer,Boss")]
     public class CheckController : ControllerBase
     {
         private readonly ISale _sale;
@@ -33,7 +32,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetChecksAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> GetChecksAsync()
         {
             var data = await _check.GetChecksAsync();
@@ -42,6 +41,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetAllChecksAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetAllChecksAsync()
         {
             var data = await _check.GetAllChecksAsync();
@@ -50,18 +50,18 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCheckbyNumberAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> GetCheckbyNumberAsync(AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
             if (check != null) return check;
-            var data = await _check.GetCheckbyNumberAsync(dto.Id);
+            var data = await _check.GetCheckbyIdAsync(dto.Id);
             var response = _response.GetResponse(data);
             return response;
         }
 
         [HttpPost("CreateCheckAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
+        [Authorize(Roles  = "Admin,Developer,Boss,Kassir")]
         public async Task<IActionResult> CreateCheckAsync([FromQuery] CheckPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -72,7 +72,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("UseBonus_CardAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
+        [Authorize(Roles  = "Admin,Developer,Boss,Kassir")]
         public async Task<IActionResult> UseBonus_CardAsync([FromQuery] UseCardPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -83,7 +83,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("UseDiscount_CardAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
+        [Authorize(Roles  = "Admin,Developer,Boss,Kassir")]
         public async Task<IActionResult> UseDiscount_CardAsync([FromQuery] UseCardPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -94,7 +94,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("AddAmountInCheckAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
+        [Authorize(Roles  = "Admin,Developer,Boss,Kassir")]
         public async Task<IActionResult> AddAmountInCheckAsync([FromQuery] AddAmountPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -105,7 +105,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("SaveCheckByIncluded")]
-        [Authorize(Roles = "Admin,Kassir")]
+        [Authorize(Roles  = "Admin,Developer,Boss,Kassir")]
         public async Task<IActionResult> SaveCheckByIncluded([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -116,7 +116,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCheckAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> DeleteCheckAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -137,6 +137,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnCheckAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnCheckAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -151,7 +152,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetSalesAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> GetSalesAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -162,6 +163,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetAllSalesAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetAllSalesAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -172,7 +174,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSaleByIdAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> GetSaleByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -182,74 +184,10 @@ namespace Market.Controllers
             return response;
         }
 
-        [HttpGet("GetSaleVisualAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
-        public async Task<IActionResult> GetSaleVisualAsync([FromQuery] AllOneNumberPostDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.GetSaleVisualAsync(dto.Id);
-            var response = _response.GetResponse(data);
-            return response;
-        }
 
-        [HttpPost("AddSaleVisualAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
-        public async Task<IActionResult> AddSaleVisualAsync([FromQuery] SalePostDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.AddSaleVisualAsync(dto);
-            var response = _response.GetResponse(data);
-            return response;
-        }
-
-        [HttpPut("PutSaleOwnerAsync")]
-        public async Task<IActionResult> PutSaleOwnerAsync([FromQuery] SalePutDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.PutSaleOwnerAsync(dto);
-            var response = _response.GetResponse(data);
-            return response;
-
-        }
-
-        [HttpPut("PutSaleVisualAsync")]
-        [Authorize(Roles = "Admin,Kassir")]
-        public async Task<IActionResult> PutSaleVisualAsync([FromQuery] SalePutDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.PutSaleVisualAsync(dto);
-            var response = _response.GetResponse(data);
-            return response;
-        }
-
-        [HttpPut("PutSaleVisualOwnerAsync")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> PutSaleVisualOwnerAsync([FromQuery] SalePutDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.PutSaleVisualOwnerAsync(dto);
-            var response = _response.GetResponse(data);
-            return response;
-        }
-
-        [HttpDelete("DeleteSaleVisualAsync")]
-        [Authorize(Roles = "Admin")]
-        public async Task<IActionResult> DeleteSaleVisualAsync([FromQuery] AllOneNumberPostDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _sale.DeleteSaleVisualAsync(dto.Id);
-            var response = _response.GetResponse(data);
-            return response;
-        }
 
         [HttpDelete("DeleteSaleAsync")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> DeleteSaleAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -260,6 +198,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteSaleRealAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> DeleteSaleRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -270,6 +209,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnSaleAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnSaleAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

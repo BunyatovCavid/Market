@@ -18,9 +18,18 @@ namespace Market.Services
             _db = db;
         }
 
-        public async Task<ICollection<IncludedGetDto>> GetPaperInculededsByNumber(int Number)
+        private async Task IncreedDecreedItems(Included data, string symbol)
         {
-            var data = await _db.Includeds.Include(i => i.Paper).Include(i=>i.Item).Where(i => i.Paper.Paper_Number == Number && i.Description!="IsDelete").ToListAsync();
+                var request = await _db.Items.FirstOrDefaultAsync(c => c.Id == data.ItemId);
+            if (symbol == "+")
+                request.Number += data.Number;
+            else if (symbol == "-")
+                request.Number -= data.Number;
+            
+        }
+
+        private  ICollection<IncludedGetDto> Get_Back(List<Included> data)
+        {
             List<IncludedGetDto> response = new();
             IncludedGetDto request = new();
             foreach (var item in data)
@@ -31,20 +40,33 @@ namespace Market.Services
             return response;
         }
 
+        public async Task<ICollection<IncludedGetDto>> GetPaperInculededsByNumber(int Number)
+        {
+            var data = await _db.Includeds.Include(i => i.Paper).Include(i=>i.Item).Where(i => i.Paper.Paper_Number == Number && i.Description!="IsDelete").ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
+
         public async Task<IncludedGetDto> GetInculededById(int Id)
         {
             var data = await _db.Includeds.FirstOrDefaultAsync(i=>i.Id==Id);
             var response = _mapper.Map<IncludedGetDto>(data);
             return response;
         }
+        private async Task<Included> GetInculededByIdForMethods(int Id)
+        {
+            var data = await _db.Includeds.FirstOrDefaultAsync(i => i.Id == Id);
+            return data;
+        }
 
         public async Task<ICollection<IncludedGetDto>> AddIncluded(IncludedGetDto dto)
         {
-            var data = await GetPaperInculededsByNumber(dto.PaperId);
+            var data = await GetInculededByIdForMethods(dto.PaperId);
             if (data == null)
             {
-                var request = _mapper.Map<Sale>(dto);
-                await _db.AddAsync(request);
+                await _db.Includeds.AddAsync(data);
+                IncreedDecreedItems(data,"+");
+                await _db.SaveChangesAsync();
             }
             var response = await GetPaperInculededsByNumber(dto.PaperId);
             return response;
@@ -52,7 +74,7 @@ namespace Market.Services
 
         public async Task<ICollection<IncludedGetDto>> PutIncluded(IncludedGetDto dto)
         {
-            var data = await GetInculededById(dto.Id);
+            var data = await GetInculededByIdForMethods(dto.Id);
             if (data != null)
             {
                 _mapper.Map(dto, data);
@@ -64,11 +86,12 @@ namespace Market.Services
 
         public async Task<ICollection<IncludedGetDto>> DeleteIncluded(int Id)
         {
-            var data = await GetInculededById(Id);
+            var data = await GetInculededByIdForMethods(Id);
             ICollection<IncludedGetDto> response = null;
             if (data != null)
             {
-                data.Description = "IsDelete";
+                _db.Remove(data);
+                IncreedDecreedItems(data,"-");
                 await _db.SaveChangesAsync();
                 response = await GetPaperInculededsByNumber(data.PaperId);
             }

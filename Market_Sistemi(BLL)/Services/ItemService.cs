@@ -20,6 +20,11 @@ namespace Market.Services
             _mapper = mapper;
             _emptyfilter = emptyfilter;
         }
+        public async Task<ICollection<Item>> GetItems()
+        {
+            var data = await _db.Items.ToListAsync();
+            return data;
+        }
 
         public async Task<ICollection<ItemGetDto>> Delete(ItemFilterDto dto)
         {
@@ -40,11 +45,11 @@ namespace Market.Services
         private async Task<ICollection<Item>> ItemFilter(ItemFilterDto dto)
         {
             var data = await _db.Items.Where(i =>
-                 dto.Barkod != null ? i.Barkod == dto.Barkod : i.Barkod != 0 &&
-                 dto.Name != null ? i.Name == dto.Name : i.Name != "" &&
-                 dto.CategoryId != null ? i.CategoryId == dto.CategoryId : i.CategoryId != 0 &&
-                 dto.CompanyId != null ? i.CompanyId == dto.CompanyId : i.CompanyId != 0 &&
-                 dto.Sub_CategoryId != null ? i.Sub_CategoryId == dto.Sub_CategoryId : i.Sub_CategoryId != 0 &&
+                 dto.Barkod != null ? i.Barkod == dto.Barkod : i.Barkod != null ||
+                 dto.Name != null ? i.Name == dto.Name : i.Name != null ||
+                 dto.CategoryId != 0 ? i.CategoryId == dto.CategoryId : i.CategoryId != 0 ||
+                 dto.CompanyId != 0 ? i.CompanyId == dto.CompanyId : i.CompanyId != 0 ||
+                 dto.Sub_CategoryId != null ? i.Sub_CategoryId == dto.Sub_CategoryId : i.Sub_CategoryId != null ||
                  dto.Before_Date != null ? dto.After_Date != null ? i.Date > dto.Before_Date && i.Date < dto.After_Date : i.Date > dto.Before_Date : i.Date != null
                  ).ToListAsync();
 
@@ -71,7 +76,7 @@ namespace Market.Services
             {
                 var data = _mapper.Map<Item>(dto);
                 data.Date = DateTime.Now;
-                await _db.AddAsync(data);
+                await _db.Items.AddAsync(data);
                 await _db.SaveChangesAsync();
             }
             var response = await GetItemsByFilter(_emptyfilter);

@@ -51,6 +51,7 @@ builder.Services.AddScoped<IDiscount_Card, DiscountService>();
 builder.Services.AddScoped<IBonus_Card, Bonus_CardService>();
 builder.Services.AddScoped<ICategory, CategoryService>();
 builder.Services.AddScoped<ISub_Category, Sub_CategoryService>();
+builder.Services.AddScoped<ICompany, CompanyService>();
 
 builder.Services.AddScoped<JWTTokenService>();
 builder.Services.AddSingleton<ItemFilterDto>();
@@ -84,11 +85,11 @@ builder.Services.AddSwaggerGen(options =>
     options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Scheme = "Bearer",
-        //BearerFormat = "JWT",
+        BearerFormat = "JWT",
         In = ParameterLocation.Header,
         Name = "Authorization",
         Description = "Bearer Authentication with JWT Token",
-        //Type = SecuritySchemeType.Http
+        Type = SecuritySchemeType.Http
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement()
@@ -97,9 +98,9 @@ builder.Services.AddSwaggerGen(options =>
             new OpenApiSecurityScheme
             {
                 Reference = new OpenApiReference{Type = ReferenceType.SecurityScheme, Id="Bearer"},
-                Scheme = "oauth2",
-                Name = "Bearer",
-                In = ParameterLocation.Header
+                //Scheme = "oauth2",
+                //Name = "Bearer",
+                //In = ParameterLocation.Header
             },
             new List<string>()
         }

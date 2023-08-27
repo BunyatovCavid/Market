@@ -5,6 +5,7 @@ using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
 using Market.Interfaces;
+using Market_Sistemi_BLL_.Dtoes.GetDtoes;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -21,9 +22,8 @@ namespace Market.Services
             _db = db;
         }
 
-        public async Task<ICollection<PaperGetDto>> GetPapers()
+        private ICollection<PaperGetDto> Get_Back(List<Paper> data)
         {
-            var data = await _db.Papers.Where(p => p.Description != "IsDelete").ToListAsync();
             List<PaperGetDto> response = new();
             PaperGetDto request = new();
             foreach (var item in data)
@@ -33,23 +33,34 @@ namespace Market.Services
             }
             return response;
         }
-
-        public async Task<ICollection<PaperGetDto>> GetAllPapers()
+        public async Task<ICollection<PaperGetDto>> GetPapers()
         {
-            var data = await _db.Papers.ToListAsync();
-            List<PaperGetDto> response = new();
-            PaperGetDto request = new();
+            var data = await _db.Papers.Where(p => p.Description != "IsDelete").ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
+
+        private ICollection<PaperAllGetDto> Get_BackAll(List<Paper> data)
+        {
+            List<PaperAllGetDto> response = new();
+            PaperAllGetDto request = new();
             foreach (var item in data)
             {
-                request = _mapper.Map<PaperGetDto>(item);
+                request = _mapper.Map<PaperAllGetDto>(item);
                 response.Add(request);
             }
+            return response;
+        }
+        public async Task<ICollection<PaperAllGetDto>> GetAllPapers()
+        {
+            var data = await _db.Papers.ToListAsync();
+            var response = Get_BackAll(data);
             return response;
         }
 
         public async Task<PaperGetDto> GetPaperbyNumber(int Number)
         {
-            var data = await _db.Papers.Include(p => p.Includeds).FirstOrDefaultAsync(p => p.Paper_Number == Number);
+            var data = await _db.Papers.Include(p => p.Includeds).FirstOrDefaultAsync(p => p.Paper_Number == Number &&p.Description !="IsDelete");
             var response = _mapper.Map<PaperGetDto>(data);
             return response;
         }
@@ -88,24 +99,57 @@ namespace Market.Services
             return response;
         }
 
-        public async Task<ICollection<PaperGetDto>> DeletePaper(int Number)
+        private async Task<Paper> GetPaperAsyncByIdForMethods(int Id)
         {
-            var data = await GetPaperbyNumber(Number);
+            var data = await _db.Papers.FirstOrDefaultAsync(c=>c.Id==Id);
+            return data;
+        }
+        public async Task<ICollection<PaperGetDto>> DeletePaper(int Id)
+        {
+            var data = await GetPaperAsyncByIdForMethods(Id);
             if (data != null)
             {
                 data.Description = "IsDelete";
+                foreach (var item in data.Includeds)
+                {
+                    item.Description = "IsDelete";
+                }
                 await _db.SaveChangesAsync();
             }
             var response = await GetPapers();
             return response;
         }
 
-        public async Task<ICollection<PaperGetDto>> SavePaperByIncluded()
+        public async Task<ICollection<PaperAllGetDto>> DeletePaperReal(int Id)
         {
-            await _db.SaveChangesAsync();
-            var data = await GetPapers();
-            return data;
+            var data = await GetPaperAsyncByIdForMethods(Id);
+            if (data != null)
+            {
+                _db.Papers.Remove(data);
+                foreach (var item in data.Includeds)
+                {
+                    _db.Includeds.Remove(item);
+                }
+                await _db.SaveChangesAsync();
+            }
+            var response = await GetAllPapers();
+            return response;
         }
 
+        public async Task<ICollection<PaperAllGetDto>> ReturnDelete(int Id)
+        {
+            var data = await GetPaperAsyncByIdForMethods(Id);
+            if (data != null)
+            {
+                data.Description = "ReturnData";
+                foreach (var item in data.Includeds)
+                {
+                    item.Description = "ReturnData";
+                }
+                await _db.SaveChangesAsync();
+            }
+            var response = await GetAllPapers();
+            return response;
+        }
     }
 }

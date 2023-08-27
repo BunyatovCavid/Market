@@ -37,12 +37,12 @@ namespace Market.Controllers
 
 
         [HttpGet("Login")]
-        public IActionResult Login([FromQuery] LoginDto dto)
+        public async Task<IActionResult> Login([FromQuery] LoginDto dto)
         {
             var check = _response.CheckState(dto);
             if (check != null) return check;
 
-            var data = _token.LogIn(dto);
+            var data = await _token.LogIn(dto);
             var request = JsonSerializer.Serialize(data);
 
             var response = _response.GetResponse(request);
@@ -167,7 +167,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCross")]
-        [Authorize(Roles =("Developer"))]
+        [Authorize(Roles =("Developer,Boss"))]
         public async Task<IActionResult> CreateCross([FromQuery] Cross_Account_RoleDto dto)
         {
             var check = _response.CheckState(dto);

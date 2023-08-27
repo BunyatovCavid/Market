@@ -12,19 +12,14 @@ namespace Market.Interfaces
 
         public Task<SaleGetDto> GetSaleByIdAsync(int Id);
 
-        public Task<ICollection<SaleGetDto>> AddSaleVisualAsync(SalePostDto dto);
+        public Task<ICollection<SaleGetDto>> AddSaleAsync(SalePostDto dto);
 
-        public Task<ICollection<SaleGetDto>> PutSaleOwnerAsync(SalePutDto dto);
-        public Task<ICollection<SaleGetDto>> PutSaleVisualAsync(SalePutDto dto);
-        public Task<ICollection<SaleGetDto>> PutSaleVisualOwnerAsync(SalePutDto dto);
+        public Task<ICollection<SaleGetDto>> PutSaleAsync(SalePutDto dto);
 
-        public Task<ICollection<SaleGetDto>> DeleteSaleVisualAsync(int Id);
+
         public Task<ICollection<SaleGetDto>> DeleteSaleAsync(int Id);
         public Task<ICollection<SaleAllGetDto>> DeleteSaleRealAsync(int Id);
         public Task<ICollection<SaleGetDto>> ReturnSaleAsync(int Id);
-
-
-        public Task<ICollection<SaleGetDto>> GetSaleVisualAsync(int Number);
 
 
 

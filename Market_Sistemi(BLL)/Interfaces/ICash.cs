@@ -14,10 +14,6 @@ namespace Market.Interfaces
 
         public Task<ICollection<CashGetDto>> PutCashAsync(CashPutDto dto);
 
-        public Task<ICollection<CashGetDto>> DeleteCashAsync(int Id);
-
         public Task<ICollection<CashGetDto>> DeleteCashRealAsync(int Id);
-
-        public Task<ICollection<CashGetDto>> ReturnCashAsync(int Id);
     }
 }

@@ -44,7 +44,7 @@ namespace Market.IEntityTypeConfigurations
                  .WithOne(I => I.Item)
                  .HasForeignKey<Sale>(In => In.ItemId)
                  .OnDelete(DeleteBehavior.NoAction);
-  
+
         }
     }
 }

@@ -34,14 +34,14 @@ namespace Market.Services
             {
                 var request = _mapper.Map<Company>(dto);
                 await _db.AddAsync(request);
+                await _db.SaveChangesAsync();
             }
             var response = await GetCompanyAsync();
             return response;
         }
 
-        public async Task<ICollection<CompanyAllGetDo>> GetAllCompanyAsync()
+        private ICollection<CompanyAllGetDo>Get_BackAll(List<Company> data)
         {
-            var data = await _db.Companies.ToListAsync();
             List<CompanyAllGetDo> response = new();
             CompanyAllGetDo request = new();
             foreach (var item in data)
@@ -51,10 +51,14 @@ namespace Market.Services
             }
             return response;
         }
-
-        public async Task<ICollection<CompanyGetDto>> GetCompanyAsync()
+        public async Task<ICollection<CompanyAllGetDo>> GetAllCompanyAsync()
         {
-            var data = await _db.Companies.Where(c => c.Description != "IsDelete").ToListAsync();
+            var data = await _db.Companies.ToListAsync();
+            var response = Get_BackAll(data);
+            return response;
+        }
+        private ICollection<CompanyGetDto> Get_Back(List<Company> data)
+        {
             List<CompanyGetDto> response = new();
             CompanyGetDto request = new();
             foreach (var item in data)
@@ -62,6 +66,12 @@ namespace Market.Services
                 request = _mapper.Map<CompanyGetDto>(item);
                 response.Add(request);
             }
+            return response;
+        }
+        public async Task<ICollection<CompanyGetDto>> GetCompanyAsync()
+        {
+            var data = await _db.Companies.Where(c => c.Description != "IsDelete").ToListAsync();
+            var response = Get_Back(data);
             return response;
         }
 

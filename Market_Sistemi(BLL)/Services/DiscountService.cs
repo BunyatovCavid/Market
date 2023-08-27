@@ -21,9 +21,8 @@ namespace Market.Services
             _db = db;
         }
 
-        public async Task<ICollection<Discount_CardGetDto>> GetDiscount_CardAsync()
+        private ICollection<Discount_CardGetDto> Get_Back(List<Discount_Card> data)
         {
-            var data = await _db.Discount_Cards.Where(d=>d.Description !="IsDelete").ToListAsync();
             List<Discount_CardGetDto> response = new();
             Discount_CardGetDto request = new();
             foreach (var item in data)
@@ -33,10 +32,15 @@ namespace Market.Services
             }
             return response;
         }
-
-        public async Task<ICollection<Discount_CardAllGetDto>> GetAllDiscount_CardAsync()
+        public async Task<ICollection<Discount_CardGetDto>> GetDiscount_CardAsync()
         {
-            var data = await _db.Discount_Cards.ToListAsync();
+            var data = await _db.Discount_Cards.Where(d=>d.Description !="IsDelete").ToListAsync();
+            var response = Get_Back(data);
+            return response;
+        }
+
+        private ICollection<Discount_CardAllGetDto> Get_BackAll(List<Discount_Card> data)
+        {
             List<Discount_CardAllGetDto> response = new();
             Discount_CardAllGetDto request = new();
             foreach (var item in data)
@@ -46,12 +50,17 @@ namespace Market.Services
             }
             return response;
         }
+        public async Task<ICollection<Discount_CardAllGetDto>> GetAllDiscount_CardAsync()
+        {
+            var data = await _db.Discount_Cards.ToListAsync();
+            var response = Get_BackAll(data);
+            return response;
+        }
 
-        private async Task<Discount_CardGetDto> GetDiscount_CardByIdAsync(int Barkod)
+        private async Task<Discount_Card> GetDiscount_CardByIdAsync(int Barkod)
         {
             var data = await _db.Discount_Cards.FirstOrDefaultAsync(c => c.Barkod == Barkod && c.Description!="IsDelete");
-            var response = _mapper.Map<Discount_CardGetDto>(data);
-            return response;
+            return data;
         }
 
         public async Task<ICollection<Discount_CardGetDto>> CreateDiscount_CardAsync(Discount_CardPostDto dto)
@@ -61,6 +70,7 @@ namespace Market.Services
             {
                 var request = _mapper.Map<Discount_Card>(dto);
                 await _db.AddAsync(request);
+                await _db.SaveChangesAsync();
             }
             var response = await GetDiscount_CardAsync();
             return response;
@@ -68,7 +78,7 @@ namespace Market.Services
 
         public async Task<ICollection<Discount_CardGetDto>> PutDiscount_CardAsync(Discount_CardPutDto dto)
         {
-            var data = await GetDiscount_CardByIdAsync(dto.Barkod);
+            var data = await GetDiscount_CardByIdAsync((int)dto.Barkod);
             if (data != null)
             {
                 _mapper.Map(dto, data);
@@ -83,9 +93,9 @@ namespace Market.Services
             var data = await _db.Discount_Cards.FirstOrDefaultAsync(d=>d.Id==Id);
             return data;
         }
-        public async Task<ICollection<Discount_CardGetDto>> DeleteDiscount_CardAsync(int Id)
+        public async Task<ICollection<Discount_CardGetDto>> DeleteDiscount_CardAsync(int Barkod)
         {
-            var data = await GetDiscount_CardForDeleteAsync(Id);
+            var data = await GetDiscount_CardByIdAsync(Barkod);
             if (data != null)
             {
                 data.Description = "IsDelete";

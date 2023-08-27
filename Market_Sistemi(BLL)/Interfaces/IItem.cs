@@ -8,7 +8,7 @@ namespace Market.Interfaces
 {
     public interface IItem
     {
-
+        public  Task<ICollection<Item>> GetItems();
         public Task<ICollection<ItemGetDto>> Delete(ItemFilterDto dto);
         public Task<ICollection<ItemGetDto>> GetItemsByFilter(ItemFilterDto dto);
         public Task<ICollection<ItemGetDto>> CreateItemAsync(ItemPostDto dto);

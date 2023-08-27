@@ -9,6 +9,8 @@ using Market.Interfaces;
 using Market_Sistemi_BLL_.Dtoes;
 using Market_Sistemi_BLL_.Interfaces;
 using Market_Sistemi_BLL_.Dtoes.GetDtoes;
+using Microsoft.IdentityModel.Tokens;
+using System.Runtime.CompilerServices;
 
 namespace Market.Services
 {
@@ -63,7 +65,8 @@ namespace Market.Services
             {
                 var request = _mapper.Map<Bonus_Card>(dto);
                 request.Bonus = 0;
-                await _db.AddAsync(request);
+                await _db.Bonus_Cards.AddAsync(request);
+                await _db.SaveChangesAsync();
             }
             var response = await GetBonus_CardAsync();
             return response;
@@ -165,11 +168,8 @@ namespace Market.Services
 
         }
 
-
-
-        public async Task<ICollection<Bonus_CardAllGetDto>> GetAllBonus_CardReportAsync()
+        private ICollection<Bonus_CardAllGetDto> Get_BackAll(List<Bonus_Card> data)
         {
-            var data = await _db.Bonus_Cards.Include(c => c.Bonus_Card_Report).ToListAsync();
             List<Bonus_CardAllGetDto> response = new();
             Bonus_CardAllGetDto request = new();
             foreach (var item in data)
@@ -177,6 +177,14 @@ namespace Market.Services
                 request = _mapper.Map<Bonus_CardAllGetDto>(item);
                 response.Add(request);
             }
+            return response;
+        }
+
+
+        public async Task<ICollection<Bonus_CardAllGetDto>> GetAllBonus_CardReportAsync()
+        {
+            var data = await _db.Bonus_Cards.Include(c => c.Bonus_Card_Report).ToListAsync();
+            var response = Get_BackAll(data);
             return response;
 
         }
@@ -192,10 +200,10 @@ namespace Market.Services
         {
             var data = await _db.Bonus_Cards.Include(c => c.Bonus_Card_Report).FirstOrDefaultAsync(c => c.Barkod == Barkod);
             return data;
+
         }
-        public async Task<Bonus_CardAllGetDto> DeleteBonus_Card_ReportRealAsync(AllTwoNumberPostDto dto)
+        private async Task Delete_Back(Bonus_Card data)
         {
-            var data = await GetBonus_CardByIdForDelete(dto.Number1);
             if (data != null)
             {
                 foreach (var item in data.Bonus_Card_Report)
@@ -204,24 +212,33 @@ namespace Market.Services
                 }
                 await _db.SaveChangesAsync();
             }
+        }
+        public async Task<Bonus_CardAllGetDto> DeleteBonus_Card_ReportRealAsync(AllTwoNumberPostDto dto)
+        {
+            var data = await GetBonus_CardByIdForDelete(dto.Number1);
+            await Delete_Back(data);
             var response = await GetBonus_CardReportbyIdAsync(dto);
             return response;
         }
 
-        public async Task<Bonus_CardAllGetDto> ReturnBonus_Card_ReportAsync(AllTwoNumberPostDto dto)
+        private async Task Return_Back(Bonus_Card data, int Number)
         {
-            var data = await GetBonus_CardByIdForDelete(dto.Number2);
             if (data != null)
             {
                 foreach (var item in data.Bonus_Card_Report)
                 {
-                    if (item.Id == dto.Number1)
+                    if (item.Id == Number)
                     {
                         item.Description = "Return Data";
                     }
                 }
                 await _db.SaveChangesAsync();
             }
+        }
+        public async Task<Bonus_CardAllGetDto> ReturnBonus_Card_ReportAsync(AllTwoNumberPostDto dto)
+        {
+            var data = await GetBonus_CardByIdForDelete(dto.Number2);
+            await Return_Back(data, dto.Number1);
             var response = await GetBonus_CardReportbyIdAsync(dto);
             return response;
         }

@@ -4,6 +4,7 @@ using Market.Domain;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market_Sistemi_DAL_.Migrations
 {
     [DbContext(typeof(MarketDbContext))]
-    partial class MarketDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230826232051_mig_2")]
+    partial class mig_2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -623,6 +625,85 @@ namespace Market_Sistemi_DAL_.Migrations
                     b.ToTable("Sub_Categories");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Visuals.CheckVisual", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("AccountId")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Add_Amount")
+                        .HasColumnType("real");
+
+                    b.Property<float>("Amount")
+                        .HasColumnType("real");
+
+                    b.Property<int?>("Bonus_Amount")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("Bonus_CardId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CashId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("CheckNumber")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int?>("Discount_CardId")
+                        .HasColumnType("int");
+
+                    b.Property<float?>("Final_Amount")
+                        .HasColumnType("real");
+
+                    b.Property<float?>("Out_Amount")
+                        .HasColumnType("real");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("CheckVisuals");
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Visuals.SaleVisual", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<float?>("Amount")
+                        .HasColumnType("real");
+
+                    b.Property<int>("CheckId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ItemId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CheckId");
+
+                    b.HasIndex("ItemId")
+                        .IsUnique();
+
+                    b.ToTable("SaleVisuals");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Bonus_Card", b =>
                 {
                     b.HasOne("Market.Domain.Entities.Account", "Account")
@@ -839,6 +920,25 @@ namespace Market_Sistemi_DAL_.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("Market.Domain.Entities.Visuals.SaleVisual", b =>
+                {
+                    b.HasOne("Market.Domain.Entities.Visuals.CheckVisual", "Check")
+                        .WithMany("SaleVisuals")
+                        .HasForeignKey("CheckId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Market.Domain.Entities.Item", "Item")
+                        .WithOne("SaleVisual")
+                        .HasForeignKey("Market.Domain.Entities.Visuals.SaleVisual", "ItemId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Check");
+
+                    b.Navigation("Item");
+                });
+
             modelBuilder.Entity("Market.Domain.Entities.Account", b =>
                 {
                     b.Navigation("Bonus_Card_Reports");
@@ -905,6 +1005,9 @@ namespace Market_Sistemi_DAL_.Migrations
 
                     b.Navigation("Sale")
                         .IsRequired();
+
+                    b.Navigation("SaleVisual")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Market.Domain.Entities.Paper", b =>
@@ -920,6 +1023,11 @@ namespace Market_Sistemi_DAL_.Migrations
             modelBuilder.Entity("Market.Domain.Entities.Sub_Category", b =>
                 {
                     b.Navigation("Items");
+                });
+
+            modelBuilder.Entity("Market.Domain.Entities.Visuals.CheckVisual", b =>
+                {
+                    b.Navigation("SaleVisuals");
                 });
 #pragma warning restore 612, 618
         }

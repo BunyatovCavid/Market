@@ -16,8 +16,7 @@ using System.Data;
 namespace Market.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
-    [Authorize(Roles = "Boss,Developer")]
+    [Route("api/[controller]")]
     public class ItemController : ControllerBase
     {
         private readonly IItem _item;
@@ -32,9 +31,20 @@ namespace Market.Controllers
             _response = response;
         }
 
+
         [HttpGet("GetItems")]
-        [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> GetItems([FromQuery] ItemFilterDto dto)
+        [Authorize(Roles = "Operator,Boss,Developer")]
+        public async Task<IActionResult> GetItems()
+        {
+            var data = await _item.GetItems();
+            var response = _response.GetResponse(data);
+            return response;
+        }
+
+
+        [HttpGet("GetItemsByFilter")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
+        public async Task<IActionResult> GetItemsByFIlter([FromQuery] ItemFilterDto dto)
         {
             if (dto == null)
             {
@@ -46,7 +56,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateItem")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> CreateItem([FromQuery] ItemPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -57,7 +67,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutItem")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutItem([FromQuery] ItemPutDto dto, [FromQuery] ItemPostDto putdto)
         {
             var check = _response.CheckState(putdto);
@@ -69,7 +79,7 @@ namespace Market.Controllers
 
 
         [HttpDelete("DeleteItem")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> DeleteItem([FromQuery] ItemPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -85,7 +95,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetPapers")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetPapers()
         {
             var data = await _paper.GetPapers();
@@ -95,6 +105,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetAllPaper")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetAllPaper()
         {
             var data = await _paper.GetAllPapers();
@@ -103,7 +114,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetPaperbyNumber")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetPaperByNumber([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -115,7 +126,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreatePaper")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> CreatePaper([FromQuery] PaperPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -127,7 +138,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutPaper")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutPaper([FromQuery] PaperPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -139,7 +150,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeletePaper")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> DeletePaper([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -150,22 +161,14 @@ namespace Market.Controllers
             
         }
 
-        [HttpGet("SavePaper")]
-        [Authorize(Roles = "Operator")]
-        public async Task<IActionResult> SavePaper()
-        {
 
-            var data = await _paper.SavePaperByIncluded();
-            var response = _response.GetResponse(data);
-            return response;
-        }
 
 
         //Include
 
 
         [HttpGet("GetPaperInculededsByNumber")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetPaperInculededsByNumber([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -177,7 +180,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetIncludedById")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetIncludedById([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -188,7 +191,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("AddIncluded")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> AddIncluded([FromQuery] IncludedGetDto dto)
         {
 
@@ -202,7 +205,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutIncluded")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutIncluded([FromQuery] IncludedGetDto dto)
         {
 
@@ -216,7 +219,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteIncluded")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> DeleteIncluded([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

@@ -2,6 +2,7 @@
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PutDto;
+using Market_Sistemi_BLL_.Dtoes.GetDtoes;
 
 namespace Market.Interfaces
 {
@@ -9,7 +10,7 @@ namespace Market.Interfaces
     {
         public Task<ICollection<PaperGetDto>> GetPapers();
 
-        public Task<ICollection<PaperGetDto>> GetAllPapers();
+        public Task<ICollection<PaperAllGetDto>> GetAllPapers();
 
         public Task<PaperGetDto> GetPaperbyNumber(int Number);
 
@@ -17,8 +18,9 @@ namespace Market.Interfaces
 
         public Task<ICollection<PaperGetDto>> PutPaper(PaperPutDto dto);
 
-        public Task<ICollection<PaperGetDto>> DeletePaper(int Number);
-        public Task<ICollection<PaperGetDto>> SavePaperByIncluded();
+        public Task<ICollection<PaperGetDto>> DeletePaper(int Id);
+        public Task<ICollection<PaperAllGetDto>> DeletePaperReal(int Id);
+        public Task<ICollection<PaperAllGetDto>> ReturnDelete(int Id);
 
     }
 }

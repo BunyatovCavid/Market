@@ -54,17 +54,6 @@ namespace Market.Controllers
             return response;
         }
 
-        [HttpDelete("DeleteCash")]
-        public async Task<IActionResult> DeleteCash([FromQuery] AllOneNumberPostDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _cash.DeleteCashAsync(dto.Id);
-            var response = _response.GetResponse(data);
-            return response;
-        }
-
-
         [HttpDelete("DeleteCashRealAsync")]
         public async Task<IActionResult> DeleteCashRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
@@ -75,14 +64,5 @@ namespace Market.Controllers
             return response;
         }
 
-        [HttpPut("ReturnCash")]
-        public async Task<IActionResult> ReturnCash([FromQuery] AllOneNumberPostDto dto)
-        {
-            var check = _response.CheckState(dto);
-            if (check != null) return check;
-            var data = await _cash.ReturnCashAsync(dto.Id);
-            var response = _response.GetResponse(data);
-            return response;
-        }
     }
 }

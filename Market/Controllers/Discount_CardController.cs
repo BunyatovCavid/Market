@@ -11,7 +11,6 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Developer,Boss")]
     public class Discount_CardController : ControllerBase
     {
         private readonly IDiscount_Card _discount;
@@ -24,7 +23,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetDiscount_Card")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> GetDiscount_CardAsync()
         {
             var data = await _discount.GetDiscount_CardAsync();
@@ -34,6 +33,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetAllDiscount_Card")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetAllDiscount_CardAsync()
         {
             var data = await _discount.GetAllDiscount_CardAsync();
@@ -42,7 +42,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateDiscount_Card")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> CreateDiscount_Card([FromQuery] Discount_CardPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -53,7 +53,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutDiscount_Card")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> PutDiscount_Card([FromQuery] Discount_CardPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -64,7 +64,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteDiscount_Card")]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles  = "Admin,Developer,Boss")]
         public async Task<IActionResult> DeleteDiscount_Card([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -75,6 +75,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteDiscount_CardReal")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> DeleteDiscount_CardReal([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -84,6 +85,7 @@ namespace Market.Controllers
             return response;
         }
         [HttpDelete("ReturnDiscount_Card")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnDiscount_Card([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

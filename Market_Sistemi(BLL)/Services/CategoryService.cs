@@ -19,10 +19,8 @@ namespace Market.Services
             _db = db;
         }
 
-
-        public async Task<ICollection<CategoryAllGetDto>> GetCategoryAllAsync()
+        private ICollection<CategoryAllGetDto> Get_BackAll(List<Category> data)
         {
-            var data = await _db.Categories.ToListAsync();
             List<CategoryAllGetDto> response = new();
             CategoryAllGetDto request = new();
             foreach (var item in data)
@@ -33,9 +31,15 @@ namespace Market.Services
             return response;
         }
 
-        public async Task<ICollection<CategoryBySub_CategoryGetDto>> GetCategoryAllBySubCategoryAsync()
+        public async Task<ICollection<CategoryAllGetDto>> GetCategoryAllAsync()
         {
-            var data = await _db.Categories.Include(c => c.Sub_Categories).ToListAsync();
+            var data = await _db.Categories.ToListAsync();
+            var response = Get_BackAll(data);
+            return response;
+        }
+
+        private ICollection<CategoryBySub_CategoryGetDto> Get_BackBySubCatgoryyAll(List<Category > data)
+        {
             List<CategoryBySub_CategoryGetDto> response = new();
             CategoryBySub_CategoryGetDto request = new();
             foreach (var item in data)
@@ -50,6 +54,25 @@ namespace Market.Services
             return response;
         }
 
+        public async Task<ICollection<CategoryBySub_CategoryGetDto>> GetCategoryAllBySubCategoryAsync()
+        {
+            var data = await _db.Categories.Include(c => c.Sub_Categories).ToListAsync();
+            var response = Get_BackBySubCatgoryyAll(data);
+            return response;
+        }
+
+
+        private ICollection<CategoryGetDto> Get_Back(List<Category> data)
+        {
+            List<CategoryGetDto> response = new();
+            CategoryGetDto request = new();
+            foreach (var item in data)
+            {
+                request = _mapper.Map<CategoryGetDto>(item);
+                response.Add(request);
+            }
+            return response;
+        }
         public async Task<ICollection<CategoryGetDto>> GetCategoryAsync()
         {
             var data = await _db.Categories.Where(c => c.Description != "IsDelete").ToListAsync();
@@ -70,9 +93,9 @@ namespace Market.Services
             return response;
         }
 
-        public async Task<ICollection<CategoryBySub_CategoryGetDto>> GetCategoryBySubCategoryAsync()
+
+        private ICollection<CategoryBySub_CategoryGetDto> Get_BackBYSubCategory(List<Category> data)
         {
-            var data = await _db.Categories.Include(c => c.Sub_Categories).Where(c => c.Description != "IsDelete").OrderByDescending(c => c.Date).ToListAsync();
             List<CategoryBySub_CategoryGetDto> response = new();
             CategoryBySub_CategoryGetDto request = new();
             foreach (var item in data)
@@ -85,6 +108,12 @@ namespace Market.Services
                 }
                 response.Add(request);
             }
+            return response;
+        }
+        public async Task<ICollection<CategoryBySub_CategoryGetDto>> GetCategoryBySubCategoryAsync()
+        {
+            var data = await _db.Categories.Include(c => c.Sub_Categories).Where(c => c.Description != "IsDelete").OrderByDescending(c => c.Date).ToListAsync();
+            var response = Get_BackBYSubCategory(data);
             return response;
         }
 

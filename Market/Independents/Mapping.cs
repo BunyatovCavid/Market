@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Market.Domain.Entities;
 using Market.Domain.Entities.Cross;
-using Market.Domain.Entities.Visuals;
 using Market.Dtoes;
 using Market.Dtoes.Get_Dtoes;
 using Market.Dtoes.GetDtoes;
@@ -9,6 +8,7 @@ using Market.Dtoes.Post_Dtoes;
 using Market.Dtoes.PostDtoes;
 using Market.Dtoes.PutDto;
 using Market_Sistemi_BLL_.Dtoes.GetDtoes;
+using Market_Sistemi_BLL_.Dtoes.PostDtoes;
 using Market_Sistemi_BLL_.Interfaces;
 
 namespace Market.Independents
@@ -33,6 +33,7 @@ namespace Market.Independents
             CreateMap<Item, ItemGetDto>();
             CreateMap<ItemGetDto, Item>();
             CreateMap<ItemPutDto, ItemGetDto>();
+            CreateMap<ItemPostDto, Item >();
 
             CreateMap<Role, RoleDto>();
             CreateMap<RoleDto, Role>();
@@ -43,6 +44,7 @@ namespace Market.Independents
             CreateMap<PaperPostDto, Paper>();
             CreateMap<Paper, PaperGetDto>();
             CreateMap<PaperPutDto, Paper>();
+            CreateMap<Paper, PaperAllGetDto>();
 
             CreateMap<Included, IncludedGetDto>();
             CreateMap<IncludedGetDto, Included>();
@@ -54,17 +56,10 @@ namespace Market.Independents
 
             CreateMap<CheckPostDto, Check>();
             CreateMap<Check, CheckGetDto>();
-            CreateMap<CheckVisual, Check>();
-            CreateMap<CheckVisual, CheckGetDto>();
-            CreateMap<CheckVisual, CheckBySaleGetDto>();
-            CreateMap<CheckGetDto, CheckVisual>();
-            CreateMap<CheckPostDto, CheckVisual>();
             CreateMap<CheckGetDto, Check>();
 
 
             CreateMap<Sale, SaleGetDto>();
-            CreateMap<SaleVisual, SaleGetDto>();
-            CreateMap<SalePostDto, SaleVisual>();
             CreateMap<Sale, SaleAllGetDto>();
             CreateMap<SaleGetDto, Sale>();
 

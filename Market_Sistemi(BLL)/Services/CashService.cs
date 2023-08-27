@@ -33,13 +33,12 @@ namespace Market.Services
             return response;
         }
 
-        private async Task<CashGetDto> GetCashByIdAsync(CashPutDto dto)
+        private async Task<Cash> GetCashByIdAsync(CashPutDto dto)
         {
             var data = await _db.Cashes.FirstOrDefaultAsync(c =>
             dto.Id != 0 ? c.Id == dto.Id : c.Number == dto.Number
             );
-            var response = _mapper.Map<CashGetDto>(data);
-            return response;
+            return data;
         }
 
         public async Task<ICollection<CashGetDto>> CreateCashAsync(CashPostDto dto)
@@ -48,7 +47,8 @@ namespace Market.Services
             if (data == null)
             {
                 var request = _mapper.Map<Cash>(dto);
-                await _db.AddAsync(request);
+                await _db.Cashes.AddAsync(request);
+                await _db.SaveChangesAsync();
             }
             var response = await GetCashAsync();
             return response;
@@ -65,27 +65,9 @@ namespace Market.Services
             var response = await GetCashAsync();
             return response;
         }
-
-        private async Task<Cash> GetCashForDelete(int Id)
-        {
-            var data = await _db.Cashes.FirstOrDefaultAsync(c => c.Id == Id);
-            return data;
-        }
-        public async Task<ICollection<CashGetDto>> DeleteCashAsync(int Id)
-        {
-            var data = await GetCashForDelete(Id);
-            if (data != null)
-            {
-                data.Description = "IsDelete";
-                await _db.SaveChangesAsync();
-            }
-            var response = await GetCashAsync();
-            return response;
-        }
-
         public async Task<ICollection<CashGetDto>> DeleteCashRealAsync(int Id)
         {
-            var data = await GetCashForDelete(Id);
+            var data = await GetCashByIdAsync(new (){ Id = Id });
             if (data != null)
             {
                 _db.Cashes.Remove(data);
@@ -95,16 +77,5 @@ namespace Market.Services
             return response;
         }
 
-        public async Task<ICollection<CashGetDto>> ReturnCashAsync(int Id)
-        {
-            var data = await GetCashForDelete(Id);
-            if(data!=null)
-            {
-                data.Description = "ReturnData";
-                await _db.SaveChangesAsync();
-            }
-            var response = await GetCashAsync();
-            return response;
-        }
     }
 }

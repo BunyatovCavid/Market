@@ -13,7 +13,6 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Developer,Boss")]
     public class CompanyController : ControllerBase
     {
 
@@ -27,7 +26,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCompany")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetCompanyAsync()
         {
             var data = await _company.GetCompanyAsync();
@@ -36,6 +35,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetAllCompany")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetAllCompanyAsync()
         {
             var data = await _company.GetAllCompanyAsync();
@@ -44,7 +44,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCompany")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> CreateCompanyAsync([FromQuery] CompanyPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -55,7 +55,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutCompany")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutCompanyAsync([FromQuery] CompanyPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -66,7 +66,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCompany")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> DeleteCompanyAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -78,6 +78,7 @@ namespace Market.Controllers
 
 
         [HttpDelete("DeleteCategoryRealAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> DeleteCategoryRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -88,6 +89,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnCategoryAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnCategoryAsync([FromQuery]AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

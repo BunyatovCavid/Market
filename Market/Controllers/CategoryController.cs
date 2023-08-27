@@ -12,7 +12,6 @@ namespace Market.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Developer,Boss")]
     public class CategoryController : ControllerBase
     {
         private readonly ICategory _category;
@@ -27,7 +26,7 @@ namespace Market.Controllers
 
 
         [HttpGet("GetCategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetCategoryAsync()
         {
             var data = await _category.GetCategoryAsync();
@@ -36,7 +35,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryByIdAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetCategoryGetCategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -47,7 +46,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetCategoryBySubCategoryAsync()
         {
             var data = await _category.GetCategoryBySubCategoryAsync();
@@ -56,7 +55,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryBySubCategoryByIdAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetCategoryBySubCategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -67,6 +66,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryAllAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetCategoryAllAsync()
         {
             var data = await _category.GetCategoryAllAsync();
@@ -75,6 +75,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetCategoryAllBySubCategoryAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetCategoryAllBySubCategoryAsync()
         {
             var data = await _category.GetCategoryAllBySubCategoryAsync();
@@ -83,7 +84,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateCategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> CreateCategoryAsync([FromQuery] CategoryPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -94,7 +95,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutCategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutCategoryAsync([FromQuery] CategoryPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -105,7 +106,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> DeleteCategoryAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -116,6 +117,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteCategoryRealAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> DeleteCategoryRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -126,6 +128,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnCategoryAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnCategoryAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -139,7 +142,7 @@ namespace Market.Controllers
         //Sub_Category
 
         [HttpGet("GetSub_CategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetSub_CategoryAsync()
         {
             var data = await _sub_category.GetSub_CategoryAsync();
@@ -148,7 +151,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByIdAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetSub_CategoryByIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -159,7 +162,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryByCategoryIdAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> GetSub_CategoryByCategoryIdAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -170,6 +173,7 @@ namespace Market.Controllers
         }
 
         [HttpGet("GetSub_CategoryAllAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> GetSub_CategoryAllAsync()
         {
             var data = await _sub_category.GetSub_CategoryAllAsync();
@@ -178,7 +182,7 @@ namespace Market.Controllers
         }
 
         [HttpPost("CreateSub_CategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> CreateSub_CategoryAsync([FromQuery] Sub_CategoryPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -189,7 +193,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("PutSub_CategoryAsync")]
-        [Authorize(Roles = "Operator")]
+        [Authorize(Roles  = "Operator,Developer,Boss")]
         public async Task<IActionResult> PutSub_CategoryAsync([FromQuery] Sub_CategoryPutDto dto)
         {
             var check = _response.CheckState(dto);
@@ -210,6 +214,7 @@ namespace Market.Controllers
         }
 
         [HttpDelete("DeleteSub_CategoryRealAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> DeleteSub_CategoryRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);
@@ -220,6 +225,7 @@ namespace Market.Controllers
         }
 
         [HttpPut("ReturnSub_CategoryRealAsync")]
+        [Authorize(Roles = "Developer,Boss")]
         public async Task<IActionResult> ReturnSub_CategoryRealAsync([FromQuery] AllOneNumberPostDto dto)
         {
             var check = _response.CheckState(dto);

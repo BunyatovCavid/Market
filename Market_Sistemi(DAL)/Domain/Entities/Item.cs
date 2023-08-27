@@ -1,4 +1,4 @@
-﻿using Market.Domain.Entities.Visuals;
+﻿
 using System.ComponentModel.DataAnnotations;
 using System.Security;
 
@@ -22,7 +22,6 @@ namespace Market.Domain.Entities
         public Sub_Category Sub_Category { get; set; }
         public Company Company { get; set; }
         public Sale Sale { get; set; }
-        public SaleVisual SaleVisual { get; set; }
         public Included Included { get; set; }
         public Account Account { get; set; }
     }
